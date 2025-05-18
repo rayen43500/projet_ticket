@@ -1,0 +1,956 @@
+RAPPORT DE PROJET DE FIN D’ÉTUDES
+Présenté en vue de l’obtention du
+Diplôme National de Licence en :
+Génie logiciel et systèmes d'information
+par
+Elee Ben Ameur
+ Conception et développement d’une application web
+ de gestion des interventions
+ Organisme d’accueil : Entreprise Tunisienne d'Activités Pétrolières
+ Encadrante Académique : Mme. Salwa ZAMMALI
+ Encadrant Professionnel : M. Hafedh Dorgham
+
+ Année Universitaire : 2024-2025
+République Tunisienne
+Ministère de l’Enseignement Supérieur
+et de la Recherche Scientifique
+Université de Tunis El Manar
+Faculté des Sciences de Tunis
+Département des Sciences de l’informatique
+DÉDICACES
+À mes précieux parents,
+Je vous dédie ce travail avec amour. Votre soutien indéfectible, vos sacrifices discrets et
+votre confiance en moi ont été mon étoile polaire, éclairant tout mon chemin d’un doux
+et sage amour. Merci d’avoir mis votre tendresse et votre sagacité à chaque détour de ce
+chemin.
+À ma chère famille, ma source de force et d’amour,
+Votre amour et vos prières m’ont accompagnée discrètement mais fermement . Merci
+pour votre affection.
+Enfin, Je tiens à exprimer ma gratitude envers tous mes professeurs de la Faculté des
+Sciences de Tunis ainsi que tout le personnel, sans exception. Votre encadrement, votre
+minutie et votre préoccupation pour la qualité du travail m’ont transformée en une
+étudiante d’excellence.
+Elee Ben Ameur
+Rapport de projet de fin d’études i
+REMERCIEMENT
+Je tiens à exprimer ma profonde gratitude à toutes les personnes qui ont contribué, de
+près ou de loin, à la réalisation de ce projet de fin d’études. Leurs encouragements, leurs
+conseils et leur soutien ont été d’une grande importance tout au long de cette expérience.
+Tout d’abord, je souhaite remercier chaleureusement Monsieur Hafed Dorgham,
+mon encadrant professionnel, pour son accompagnement attentif, ses conseils pertinents et
+sa disponibilité constante. Son expertise et sa rigueur m’ont permis d’avancer efficacement
+dans mon travail et d’enrichir considérablement mes compétences.
+Je tiens également à exprimer ma reconnaissance envers Madame Salma Zammeli,
+mon encadrante académique à la Faculté des Sciences de Tunis, pour son suivi rigoureux, sa bienveillance et ses orientations méthodologiques. Sa contribution a été essentielle
+dans l’élaboration et la structuration de ce rapport.
+Je remercie chaleureusement toute l’équipe de l’Entreprise Tunisienne d’Activités Pétrolières (ETAP) pour leur accueil, leur encadrement et la qualité des échanges
+professionnels durant mon stage. Leur collaboration et leur disponibilité ont largement
+facilité l’intégration et le bon déroulement de ce projet.
+Rapport de projet de fin d’études ii
+REMERCIEMENT
+Enfin, je remercie la Faculté des Sciences de Tunis (FST) pour l’enseignement de
+qualité et les outils théoriques et pratiques transmis durant mon parcours. Cette formation
+m’a permis d’aborder ce projet avec les compétences nécessaires pour sa bonne réalisation.
+Rapport de projet de fin d’études iii
+TABLE DES MATIÈRES
+I CONTEXTE GENERAL 3
+I.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+I.2 Cadre du projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+I.3 Organisme d’accueil . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+I.3.1 Présentation de l’ETAP . . . . . . . . . . . . . . . . . . . . . . . . 6
+I.3.2 Organigramme de l’ETAP . . . . . . . . . . . . . . . . . . . . . . . 6
+I.4 Présentation du projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+I.4.1 Problématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+I.4.2 Étude de l’existant . . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+I.4.3 Critique de l’existant . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+I.5 Solution envisagée et objectifs gloabaux . . . . . . . . . . . . . . . . . . . . 9
+iv
+TABLE DES MATIÈRES
+I.5.1 Solution envisagée . . . . . . . . . . . . . . . . . . . . . . . . . . . 9
+I.5.2 Objectifs globaux . . . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+I.6 Méthodologie de développement . . . . . . . . . . . . . . . . . . . . . . . . 11
+I.7 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+II Analyse et planification du projet 15
+II.1 Identification des acteurs du système . . . . . . . . . . . . . . . . . . . . . 17
+II.2 Identification des besoins . . . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+II.2.1 Besoins fonctionnels . . . . . . . . . . . . . . . . . . . . . . . . . . 18
+II.2.2 Besoins non fonctionnels . . . . . . . . . . . . . . . . . . . . . . . . 20
+II.3 Backlog du produit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 21
+II.4 Identification des sprints . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+II.5 Conception générale . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+II.5.1 Langage de modélisation UML . . . . . . . . . . . . . . . . . . . . . 25
+II.5.2 Diagramme de cas d’utilisation global . . . . . . . . . . . . . . . . . 26
+II.5.3 Diagramme des classes . . . . . . . . . . . . . . . . . . . . . . . . . 28
+II.6 Architecture du projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+II.6.1 Architecture physique . . . . . . . . . . . . . . . . . . . . . . . . . 28
+II.6.2 Architecture logique . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+Rapport de projet de fin d’études v
+TABLE DES MATIÈRES
+II.7 Environnement de travail . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+II.7.1 Environnement matériel . . . . . . . . . . . . . . . . . . . . . . . . 31
+II.7.2 Environnement logiciel . . . . . . . . . . . . . . . . . . . . . . . . . 31
+II.8 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+III Sprint 1 34
+III.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+III.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . . . . . . . 35
+III.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+III.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . . . 36
+III.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . . . . . . . . 36
+III.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+III.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+IV Sprint 2 37
+IV.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+IV.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . . . . . . . 38
+IV.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+IV.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . . . 41
+IV.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . . . . . . . . 41
+Rapport de projet de fin d’études vi
+IV.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+IV.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+V Sprint 3 42
+V.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+V.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . . . . . . . 43
+V.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+V.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . . . 45
+V.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . . . . . . . . 45
+V.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+V.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+VI Sprint 4 46
+VI.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+VI.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . . . . . . . 47
+VI.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+VI.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . . . 49
+VI.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . . . . . . . . 49
+VI.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+VI.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+Rapport de projet de fin d’études vii
+LISTE DES TABLEAUX
+II.1 Backlog du produit . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 24
+II.2 Identification des sprints . . . . . . . . . . . . . . . . . . . . . . . . . . . . 25
+III.1 Backlog du Sprint 1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+IV.1 Backlog du Sprint 2 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 40
+V.1 Backlog du Sprint 3 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+VI.1 Backlog du Sprint 4 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+Rapport de projet de fin d’études viii
+TABLE DES FIGURES
+I.1 Logo de l’ETAP . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+I.2 Organigramme de l’ETAP . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+I.3 Cycle Scrum simplifié pour projet individuel . . . . . . . . . . . . . . . . . 13
+II.1 Diagramme de cas d’utilisation global . . . . . . . . . . . . . . . . . . . . 27
+II.2 Diagramme de classe global . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+II.3 Architecture 3-tiers . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 29
+II.4 Architecture logique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 30
+II.5 Logo de Angular . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 31
+II.6 Logo de Spring Boot . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+II.7 Logo de MySQL . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+II.8 Logo de GitHub Desktop . . . . . . . . . . . . . . . . . . . . . . . . . . . . 32
+ix
+II.9 Logo de Visual Studio Code . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+II.10 Logo de IntelliJ IDEA . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+Rapport de projet de fin d’études x
+LISTE DES ABRÉVIATIONS
+— API = ApplicationProgramming Interface
+— IHM = InterfaceHommeMachine
+— JPA = JavaPersistence API
+— MOOC = MassiveOpenOnline Course
+— MVC = ModelViewController
+— REST = Representational State Transfer
+— UML = UnifiedModelingLanguage
+— XP = EXtremeProgrammin
+Rapport de projet de fin d’études xi
+INTRODUCTION GÉNÉRALE
+D
+ans un marché de plus en plus concurrentiel, la gestion d’interventions représente
+souvent un véritable défi pour les entreprises, notamment dans des secteurs à forte
+exigence tels que l’énergie.
+L’Entreprise Tunisienne d’Activités Pétrolières (ETAP), acteur majeur du domaine
+pétrolier, est amenée chaque jour à piloter un grand nombre de demandes d’intervention
+sur ses sites.
+Ces demandes, souvent gérées de manière manuelle ou par des outils tels que les emails ou les tableurs Excel, présentent plusieurs limites : la difficulté à suivre les activités
+de manière continue, l’absence de contrôle en temps réel sur l’avancement des tâches, ect
+...
+Dans le cadre de mon Projet de Fin d’Études, j’ai été amenée à concevoir et développer
+une application web permettant de gérer efficacement ces interventions
+Ce système centralise la gestion des tickets, en assurant un suivi complet de chaque
+demande depuis sa création jusqu’à sa résolution et génère des statistiques détaillées.
+Rapport de projet de fin d’études 1
+INTRODUCTION GÉNÉRALE
+Le présent rapport comprend six chapitres autre que l’introduction générale et la
+conclusion générale :
+Le premier chapitre intitulé « Contexte général » présente l’organisme d’accueil, le
+contexte du projet, la problématique, les objectifs, ainsi que l’étude de l’existant.
+Le deuxième chapitre, intitulé « Analyse et planification du projet », présente notre
+sprint de démarrage. Il montre en premier lieu, les acteurs ainsi que les besoins fonctionnels
+et non fonctionnels de notre solution, il expose aussi le backlog du produit et l’identification des sprints .Ensuite, il montre le diagramme de cas d’utilisation et des classe générals.
+Enfin, il décrit l’architecture globale à implémenter, l’environnement matériel et logiciel
+à adopter au cours du développement.
+Les quatre chapitres qui suivent font l’objet des sprints à réaliser pour atteindre les
+objectifs de notre solution. Dans chaque sprint, nous allons débuter avec la partie analyse
+puis le diagramme de séquence, ainsi la réalisation.
+Enfin, nous clôturons ce rapport par une conclusion générale dans laquelle nous évaluons le travail travaillé et nous proposons de nouvelles perspectives dans le main d’améliorer notre projet
+Rapport de projet de fin d’études 2
+CHAPITRE I
+CONTEXTE GENERAL
+Sommaire
+I.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+I.2 Cadre du projet . . . . . . . . . . . . . . . . . . . . . . . . . . . 5
+I.3 Organisme d’accueil . . . . . . . . . . . . . . . . . . . . . . . . . 5
+I.3.1 Présentation de l’ETAP . . . . . . . . . . . . . . . . . . . . . . 6
+I.3.2 Organigramme de l’ETAP . . . . . . . . . . . . . . . . . . . . . 6
+I.4 Présentation du projet . . . . . . . . . . . . . . . . . . . . . . . 7
+I.4.1 Problématique . . . . . . . . . . . . . . . . . . . . . . . . . . . 7
+I.4.2 Étude de l’existant . . . . . . . . . . . . . . . . . . . . . . . . . 8
+I.4.3 Critique de l’existant . . . . . . . . . . . . . . . . . . . . . . . . 8
+I.5 Solution envisagée et objectifs gloabaux . . . . . . . . . . . . . 9
+I.5.1 Solution envisagée . . . . . . . . . . . . . . . . . . . . . . . . . 9
+I.5.2 Objectifs globaux . . . . . . . . . . . . . . . . . . . . . . . . . . 10
+I.6 Méthodologie de développement . . . . . . . . . . . . . . . . . 11
+I.7 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 14
+Rapport de projet de fin d’études 3
+Chapitre 1. Contexte général
+Rapport de projet de fin d’études 4
+Chapitre 1. Contexte général
+I.1 Introduction
+T
+oute création commence par une simple pensée, mais c’est la vision qui la transforme
+en projet. C’est ainsi qu’un projet voit le jour : d’une nécessité urgente, d’une
+observation perspicace ou d’une expertise acquise avec diligence.
+Ce chapitre a pour objectif de présenter et d’introduire le cadre général du projet. Il inclut
+une présentation de l’organisme d’accueil, une étude détaillée de la problématique, ainsi
+qu’une analyse de la situation actuelle pour souligner l’importance d’un nouveau projet.
+Par la suite,une nouvelle solution est brièvement exposée ainsi que les objectifs généraux.
+Enfin, nous présenterons la méthode de gestion employée pour la mise en œuvre de ce
+projet.
+I.2 Cadre du projet
+Dans le cadre de la préparation au projet de fin d’études, en vue de l’obtention du
+diplôme National de Licence en génie logiciel et systèmes d’information à la Faculté des
+Sciences de Tunis (FST), ce travail a été réalisé au sein de l’entreprise Tunisienne d’Activités Pétrolières (ETAP). Ce stage, d’une durée de quatre mois, s’est déroulé du 3 février
+au 25 Mai 2025.
+I.3 Organisme d’accueil
+Cette section est consacrée à la présentation de l’organisation qui m’a accueillie durant
+mon stage, afin de contextualiser mon travail dans son environnement professionnel.
+Rapport de projet de fin d’études 5
+Chapitre 1. Contexte général
+I.3.1 Présentation de l’ETAP
+L’ETAP, Fondée en 1972, est un acteur fondamental de l’industrie pétrolière en Tunisie, spécialisée dans l’exploration, la production et la commercialisation de pétrole et de
+gaz naturel.
+Elle mène des projets d’exploration et de production, aussi bien en mer qu’à terre,
+et collabore avec des partenaires l’échelle mondiale pour améliorer les technologies et les
+procédures d’extraction.
+La figure I.1 illustre le logo de l’ETAP :
+Figure I.1 – Logo de l’ETAP
+I.3.2 Organigramme de l’ETAP
+La figure I.2 illustre l’organigramme de l’ETAP :
+Rapport de projet de fin d’études 6
+Chapitre 1. Contexte général
+Figure I.2 – Organigramme de l’ETAP
+Ce projet a été réalisé au sein du département informatique de la Direction Centrale
+des Ressources.
+I.4 Présentation du projet
+Cette partie décrit la problématique à résoudre, expose la méthode actuelle de traitement des demandes à l’ETAP, puis met en évidence ses contraintes.
+I.4.1 Problématique
+À l’ère de la digitalisation croissante, où les technologies deviennent incontournables
+dans les processus professionnels. l’ETAP rencontre des difficultés dans la gestion des
+interventions techniques. Les demandes sont actuellement gérées de manière informelle,
+principalement par téléphone ou email, ce qui limite leur efficacité.
+Devant cette situation, il est crucial d’implémenter une solution digitale centralisée
+Rapport de projet de fin d’études 7
+Chapitre 1. Contexte général
+qui facilite une meilleure gestion des interventions.
+Par conséquent, La problématique de l’ETAP se décline en trois axes principaux : le
+développement d’une application web pour gérer les interventions, l’attribution de rôles
+utilisateurs distincts et un suivi automatisé des tickets reliant les demandes aux intervenants.
+la mise en place d’une application web simple pour la gestion des interventions techniques, l’intégration de rôles utilisateurs distincts (admin, utilisateur standard et intervenant) avec des fonctionnalités adaptées, et l’assurance d’un suivi clair des tickets grâce à
+une association automatique entre les demandes créées et les intervenants.
+I.4.2 Étude de l’existant
+Actuellement, les demandes d’intervention sont gérées par des échanges téléphoniques
+ou de mails, permettant aux utilisateurs de signaler leurs besoins et aux intervenants de
+les traiter de manière informelle, sans passer par une plateforme.
+I.4.3 Critique de l’existant
+L’approche existante engendre plusieurs limites notables. Parmi les principales lacunes
+du système existant, on peut citer :
+• Manque de traçabilité : Il est difficile de suivre l’historique complet d’une intervention, de sa création jusqu’à sa clôture.
+• Perte d’informations : Les demandes peuvent se perdre dans les échanges d’emails ou ne pas être traitées à temps.
+Rapport de projet de fin d’études 8
+Chapitre 1. Contexte général
+• Aucune hiérarchisation claire : L’absence de regroupement des interventions
+selon les types de problème rend la gestion confuse.
+• Absence de statistiques ou de rapports : Il est complexe d’extraire des indicateurs utiles pour le suivi ou l’optimisation des interventions.
+• Temps de traitement allongé : Le manque d’automatisation engendre des délais
+dans la prise en charge des demandes.
+Ainsi, une solution numérique centralisée et bien structurée devient indispensable pour
+améliorer l’efficacité du service et offrir une meilleure qualité de suivi aux utilisateurs.
+I.5 Solution envisagée et objectifs gloabaux
+I.5.1 Solution envisagée
+Face aux limites constatées dans le système actuel, il est devenu essentiel pour l’ETAP
+d’adopter une solution innovante, moderne et parfaitement adaptée aux besoins spécifiques
+de gestion des interventions. Nous proposons ainsi la conception et le développement d’une
+application web de gestion des interventions, destinée à améliorer la traçabilité, l’organisation et le suivi des tickets au sein de l’Entreprise Tunisienne d’Activités Pétrolières
+(ETAP).
+Cette solution vise à centraliser toutes les demandes d’intervention au sein d’un système unique, accessible en ligne, avec une interface moderne et intuitive. L’application
+permettra aux utilisateurs de soumettre facilement leurs demandes sous forme de tickets,
+de suivre l’évolution de leur traitement, et d’interagir avec les intervenants en cas de
+Rapport de projet de fin d’études 9
+Chapitre 1. Contexte général
+besoin.
+La plateforme distinguera trois types d’utilisateurs : les utilisateurs simples, les intervenants, et les administrateurs. Chacun disposera d’un espace dédié adapté à son rôle et
+à ses responsabilités. Les administrateurs auront la possibilité de gérer les utilisateurs, les
+groupes et les sous-groupes, tandis que les intervenants pourront consulter les tickets qui
+leur sont attribués et mettre à jour leur statut. Les utilisateurs, quant à eux, pourront
+créer des tickets, suivre leur avancement et consulter l’historique de leurs demandes.
+Par ailleurs, la solution intégrera un mécanisme structuré de classification des tickets
+à travers un système de groupes et de sous-groupes.Cette organisation hiérarchique permettra d’assigner chaque ticket à une catégorie précise selon la nature de l’intervention
+demandée, facilitant ainsi la répartition, le traitement et l’analyse des demandes.
+Grâce à cette solution, l’ETAP bénéficiera d’un outil centralisé qui facilitera la gestion
+des interventions, réduira les délais de traitement, et améliorera la collaboration entre les
+différents acteurs impliqués.
+I.5.2 Objectifs globaux
+La définition des objectifs est une étape clé qui permet de bien comprendre le projet
+et d’en préciser le périmètre pour en déduire une solution adaptée
+Dans ce cadre, nous avons définit comme objectifs du projet, les points ci-dessous :
+• Offrir une interface ergonomique et responsive adaptée aux différents rôles.
+• Permettre aux intervenants de consulter et prendre en charge les tickets automatiquement.
+Rapport de projet de fin d’études 10
+Chapitre 1. Contexte général
+• Garantir un suivi fluide du cycle de vie des interventions
+• Faciliter la communication entre utilisateurs et intervenants via commentaires et
+pièces jointes.
+I.6 Méthodologie de développement
+La méthodologie Scrum est de loin l’approche de développement agile la plus utilisée.
+Elle vise essentiellement à satisfaire au mieux le besoin du client, en lui donnant le pouvoir
+de réorienter les résultats en cours de route, tout en maximisant les probabilités de réussite
+du projet. Elle repose sur des principes clés tels que la transparence, la collaboration,
+l’adaptabilité aux changements et l’amélioration continue.
+Présentation de la méthodologie SCRUM
+Bien que Scrum soit habituellement conçu pour les équipes, il a été choisi dans le
+cadre de ce projet solo pour ses nombreux avantages, notamment sa structuration claire,
+son organisation par itérations (sprints), et sa capacité à intégrer facilement les retours
+du client. Ces éléments sont parfaitement adaptés à une collaboration étroite avec un
+encadrant professionnel, dans un contexte académique.
+Différentes Phases
+La méthodologie Scrum repose sur un processus itératif et incrémental, qui se compose
+de différentes phases clés. Ces phases sont répétées cycliquement tout au long du projet,
+ce qui permet une adaptation continue, une amélioration constante, et une optimisation
+Rapport de projet de fin d’études 11
+Chapitre 1. Contexte général
+de la valeur livrée à chaque itération.
+Le schéma ci-dessous illustre visuellement ce cycle Scrum, que nous allons détailler à
+travers les différentes étapes de gestion du projet :
+1. Backlog produit
+Le projet débute par la création du backlog produit, qui est une liste priorisée des besoins
+fonctionnels exprimés sous forme de User Stories. Dans mon projet, ces besoins sont
+discutés avec mon encadrant professionnel, jouant le rôle de Product Owner. Chaque User
+Story représente une fonctionnalité à développer.
+2. Planification du sprint
+Lors de cette phase, je sélectionne, avec l’accord de mon encadrant, un ensemble de tâches
+à accomplir durant le prochain sprint. Ces tâches forment le Sprint Backlog. L’objectif est
+de déterminer une charge de travail réaliste à réaliser pendant une période fixe.
+3. Sprint
+C’est la période où les tâches sélectionnées sont développées. Chaque sprint dure généralement entre 1 et 4 semaines. Dans mon cas, j’ai adopté des cycles de 1 à 2 semaines selon
+la complexité des fonctionnalités.
+4. Réunion quotidienne
+Même en travaillant seule, je prends 15 minutes chaque jour pour faire un point rapide sur
+ce que j’ai accompli, ce que je prévois de faire, et si un blocage est survenu. Cela m’aide
+à rester concentrée et à corriger rapidement toute déviation.
+5.Revue de sprint
+À la fin de chaque sprint, je présente les fonctionnalités développées à mon encadrant.
+Rapport de projet de fin d’études 12
+Chapitre 1. Contexte général
+Cette démonstration permet de valider les travaux effectués et d’obtenir un retour immédiat sur les ajustements éventuels.
+6. Rétrospective de sprint
+Après la revue, je prends le temps d’analyser mon organisation : ce qui a bien fonctionné, ce
+qui peut être amélioré, et ce que je dois ajuster pour le sprint suivant. Cette introspection
+m’aide à progresser et à optimiser ma gestion du temps et des priorités.
+7. Livraison incrémentale
+Chaque sprint produit un incrément, c’est-à-dire une version stable, testée et potentiellement livrable du produit. Cela garantit un progrès continu et mesurable.
+8. Mise à jour du backlog
+En fonction des retours, je mets à jour le Product Backlog en ajoutant, supprimant ou
+réorganisant les User Stories.
+Figure I.3 – Cycle Scrum simplifié pour projet individuel
+Organisation
+L’organisation traditionnelle de Scrum prévoit trois rôles principaux :
+Rapport de projet de fin d’études 13
+Chapitre 1. Contexte général
+• Product Owner : Représenté ici par mon encadrant professionnel, qui exprime
+les besoins, valide les livrables et priorise les tâches.
+• Scrum Master : Ce rôle est souvent lié à la facilitation et à la coordination
+d’équipe. Dans le cadre d’un projet solo, ce rôle est supprimé car il n’est pas nécessaire. J’assure moi-même la gestion de projet, la planification et la résolution des
+blocages.
+• Équipe de développement : Je constitue l’unique membre de l’équipe, responsable du développement, des tests et de la documentation.
+I.7 Conclusion
+Ce premier chapitre a permis d’introduire le contexte général du projet, de présenter
+l’entreprise d’accueil, ainsi que de détailler les motivations, objectifs et choix technologiques du projet. Dans les chapitres suivants, nous entrerons dans les aspects plus techniques du développement, en abordant la conception détaillée de l’application, les étapes
+de réalisation, les tests, ainsi que les perspectives d’évolution.
+Rapport de projet de fin d’études 14
+CHAPITRE II
+ANALYSE ET PLANIFICATION DU PROJET
+Sommaire
+II.1 Identification des acteurs du système . . . . . . . . . . . . . . 17
+II.2 Identification des besoins . . . . . . . . . . . . . . . . . . . . . . 18
+II.2.1 Besoins fonctionnels . . . . . . . . . . . . . . . . . . . . . . . . 18
+II.2.2 Besoins non fonctionnels . . . . . . . . . . . . . . . . . . . . . . 20
+II.3 Backlog du produit . . . . . . . . . . . . . . . . . . . . . . . . . 21
+II.4 Identification des sprints . . . . . . . . . . . . . . . . . . . . . . 25
+II.5 Conception générale . . . . . . . . . . . . . . . . . . . . . . . . . 25
+II.5.1 Langage de modélisation UML . . . . . . . . . . . . . . . . . . 25
+II.5.2 Diagramme de cas d’utilisation global . . . . . . . . . . . . . . 26
+II.5.3 Diagramme des classes . . . . . . . . . . . . . . . . . . . . . . . 28
+II.6 Architecture du projet . . . . . . . . . . . . . . . . . . . . . . . 28
+II.6.1 Architecture physique . . . . . . . . . . . . . . . . . . . . . . . 28
+II.6.2 Architecture logique . . . . . . . . . . . . . . . . . . . . . . . . 29
+II.7 Environnement de travail . . . . . . . . . . . . . . . . . . . . . . 30
+Rapport de projet de fin d’études 15
+Chapitre 2. Analyse et planification du projet
+II.7.1 Environnement matériel . . . . . . . . . . . . . . . . . . . . . . 31
+II.7.2 Environnement logiciel . . . . . . . . . . . . . . . . . . . . . . . 31
+II.8 Conclusion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 33
+Rapport de projet de fin d’études 16
+Chapitre 2. Analyse et planification du projet
+Introduction
+P
+our une meilleure conception du projet, l’étude des besoins est une étape primordiale.
+Dans ce chapitre, nous nous intéressons à l’identification des différents acteurs du
+projet etles besoins fonctionnels et non fonctionnels demandés par la société, par la suite,
+nous exposerons notre backlog du produit, l’architecture du projet et l’environnement du
+travail.
+II.1 Identification des acteurs du système
+Un acteur représente une entité externe qui interagit avec le système. Cela peut être un
+opérateur humain ou un système. Les acteurs ont la capacité de consulter ou de modifier
+l’état du système, et en retour, le système fournit un service correspondant à leurs besoins..
+Dans notre application, nous identifions trois acteurs principaux :
+• Utilisateur standard : Membre interne de l’entreprise appartenant à une entité autre
+que la direction informatique. Il est chargé de soumettre des tickets d’intervention
+et suivre leur traitement.
+• Intervenant : Professionnel de la direction informatique responsable du traitement
+opérationnel des tickets.
+• Administrateur : C’est l’acteur qui dispose de tous les privilèges d’administration.
+Il gère les utilisateurs (ajout, modification, suppression), les rôles, les groupes, les
+sous-groupes et la répartition des intervenants dans ces groupes.
+Rapport de projet de fin d’études 17
+Chapitre 2. Analyse et planification du projet
+II.2 Identification des besoins
+Lors de l’analyse des besoins, nous devons faire la distinction entre les besoins fonctionnels et non fonctionnels. En effet, les besoins fonctionnels sont l’expression de ce que
+le produit ou le service délivré par le projet devrait être ou faire, et les besoins non
+fonctionnels sont les contraintes liées à l’implémentation et la mise en œuvre de produit.
+Dans cette section, nous entamons par l’identification des acteurs impliqués, suivi de la
+spécification des besoins fonctionnels et non fonctionnels du projet.
+II.2.1 Besoins fonctionnels
+L’application à réaliser doit offrir un ensemble de fonctionnalités qui doivent être mises
+en relation avec un ensemble de besoins utilisateur. Les principales exigences métiers de
+notre application se résument dans les fonctionnalités suivantes :
+• Inscription
+— S’inscrire via un formulaire dédié. Un utilisateur est automatiquement affecté
+au rôle « utilisateur standard » par défaut.
+• Authentification
+— Se connecter avec un email et un mot de passe,
+— Accéder aux fonctionnalités en fonction du rôle attribué («administrateur, intervenant, utilisateur standard»).
+• Gestion des comptes et des rôles
+— Modifier le rôle d’un utilisateur,
+— Créer des comptes et leur attribuer des rôles,
+Rapport de projet de fin d’études 18
+Chapitre 2. Analyse et planification du projet
+— Modifier les informations personnelles des utilisateurs,
+— Supprimer des comptes.
+• Gestion des groupes et sous-groupes
+— Créer, modifier ou supprimer des groupes et sous-groupes,
+— Affecter des intervenants aux groupes ou sous-groupes.
+• Gestion des tickets d’intervention
+— Soumettre des tickets via un formulaire,
+— Décrire précisément le problème,
+— Sélectionner le type d’intervention,
+— Préciser le niveau d’urgence,
+— Affecter le ticket à un groupe et/ou sous-groupe,
+— Ajouter des pièces jointes, si nécessaire.
+— Suivre l’état des tickets, ajouter des commentaires et des pièces jointes.
+• Gestion de notifications
+— Envoyer une notification aux intervenants appartenant au groupe concerné lors
+de la création d’un ticket.
+— Envoyer une notification à l’utilisateur lors de la clôture de son ticket.
+• Traitement des tickets
+— Consulter et prendre en charge les tickets,
+— Modifier le statut, ajouter des commentaires et des pièces jointes,
+• Recherche des utilisateurs
+— Rechercher un utilisateur par nom, email ou rôle.
+• Recherche des tickets
+Rapport de projet de fin d’études 19
+Chapitre 2. Analyse et planification du projet
+— Rechercher des tickets par mot-clé, groupe, sous-groupe, type, priorité, date,
+état, etc.
+— Filtrer selon les droits d’accès de l’utilisateur.
+• Interface de statistiques
+— Visualiser des graphiques statistiques par projet, priorité, groupe ou état des
+tickets.
+— Analyser les types d’interventions et les projets avec le plus d’anomalies.
+II.2.2 Besoins non fonctionnels
+Afin de garantir la qualité, la durabilité et l’efficacité de l’application, plusieurs exigences non fonctionnelles doivent être respectées :
+— Confidentialité : Toutes les informations sont partagées uniquement avec les membres
+qui ont un besoin de savoir.
+— Sécurité :
+• Chiffrement des mots de passe des utilisateurs à l’aide de l’algorithme bcrypt.
+• Contrôle d’accès strict aux fonctionnalités et données selon les rôles et les
+privilèges attribués.
+— Fiabilité et robustesse : Le système doit rester stable en cas d’erreurs ou de
+saisies invalides. Une gestion efficace des exceptions et une validation rigoureuse des
+données garantissent la continuité du service sans interruptions.
+— Maintenabilité : Nous allons travailler avec une architecture modulaire pour bien
+séparer et organiser le code,
+Rapport de projet de fin d’études 20
+Chapitre 2. Analyse et planification du projet
+— Ergonomie et design : L’interface utilisateur doit être simple, intuitive et accessible. Une attention particulière doit être portée à l’ergonomie, à l’harmonie des
+couleurs, à la lisibilité, ainsi qu’à l’aspect visuel global de l’application afin d’offrir
+une navigation agréable et cohérente pour tous les profils d’utilisateurs.
+II.3 Backlog du produit
+Cette section présente le backlog du produit, regroupant les fonctionnalités à implémenter sous forme de user stories pour chaque type d’utilisateur. Chaque fonctionnalité
+est accompagnée de sa priorité et de son délai estimé.
+Les tableaux suivants détaillent ces éléments pour les différents utilisateurs du système.
+ID Titre En tant que Je souhaite P E
+1 Inscription Utilisateur
+— S’inscrire à la plateforme. P1 7j
+2 Authentification Utilisateur
+— Se connecter à la plateforme. P1 5j
+3
+Personnalisation de la
+session Utilisateur
+— Avoir une session personnalisée P1 7j
+Rapport de projet de fin d’études 21
+Chapitre 2. Analyse et planification du projet
+4
+Gestion des comptes
+et des rôles Administrateur
+— Créer, modifier et supprimer des comptes utilisateurs.
+— Gérer les rôles des utilisateurs.
+— Consulter la liste des utilisateurs.
+P1 4j
+5 Gestion des groupes Administrateur
+— Créer, modifier et supprimer des groupes.
+— Affecter les intervenants
+aux groupes.
+— Consulter la liste des
+groupes.
+P1 7j
+6
+Gestion des sousgroupes
+Administrateur
+— Créer, modifier et supprimer des sous-groupes.
+— Affecter les sous-groupes
+aux groupes.
+— Consulter la liste des
+sous-groupes.
+P1 7j
+7
+Recherche de tous les
+tickets Administrateur
+— Rechercher les tickets
+par mot-clé, groupe, statut ...
+P2 2j
+8
+Recherche des utilisateurs Administrateur
+— Rechercher les utilisateurs par nom, email ou
+rôle. P2 2j
+Rapport de projet de fin d’études 22
+Chapitre 2. Analyse et planification du projet
+9 Statistiques Administrateur
+— Visualiser des statistiques sur les tickets. P2 5j
+10 Création de tickets
+d’intervention Utilisateur normal
+— Créer un ticket d’intervention. P1 7j
+11 Suivi des tickets Utilisateur normal
+— Suivre l’état de ses tickets.
+— Ajouter des commentaires.
+— Ajouter des pièces
+jointes.
+P1 4j
+12 Recherche de ses tickets Utilisateur normal
+— Rechercher ses tickets
+par mot-clé, groupe, statut ...
+P2 2j
+13 Notifications par
+email Utilisateur normal
+— Recevoir une notification
+lorsque mon ticket est
+clôturé. P2 4j
+Rapport de projet de fin d’études 23
+Chapitre 2. Analyse et planification du projet
+14 Traitement des tickets
+d’intervention Intervenant
+— Consulter les tickets et
+les prendre en charge.
+— Mettre à jour le statut
+des tickets.
+— Ajouter des commentaires.
+— Joindre des fichiers.
+P1 14j
+15 Recherche des tickets
+Assignés Intervenant
+— Rechercher les tickets
+par mot-clé, groupe, statut ...
+P2 2j
+16 Notifications par
+email Intervenant
+— Recevoir une notification
+dès qu’un ticket est créé
+et attribué à mon groupe
+d’appartenance.
+P2 4j
+Table II.1 – Backlog du produit
+Rapport de projet de fin d’études 24
+Chapitre 2. Analyse et planification du projet
+II.4 Identification des sprints
+Afin d’organiser le développement de la plateforme, le backlog a été réparti en quatre
+sprints, chacun ciblant une partie spécifique du système en fonction des rôles utilisateurs.
+Cette structuration permet une meilleure gestion des priorités et un avancement progressif
+et cohérent du projet.
+Sprint 1 Sprint 2 Sprint 3 Sprint 4
+S’inscrire, se connecter et personnaliser sa
+session.
+Gérer les comptes,
+rôles, groupes, sousgroupes et consulter
+les statistiques.
+Créer, suivre et rechercher des tickets.
+Prendre en charge et
+traiter les tickets.
+Table II.2 – Identification des sprints
+II.5 Conception générale
+Durant cette phase, nous allons présenter notre diagramme de cas d’utilisation et notre
+diagramme de classes.
+II.5.1 Langage de modélisation UML
+Afin de modéliser nos idées, nous avons choisi UML comme un langage de modélisation.
+En effet, UML est un langage standard pour spécifier, visualiser, construire et documenter
+les artefacts des systèmes logiciels.
+Dans notre projet, nous avons modélisé notre solution au moyen de
+• Le diagramme des classes permet une représentation statique du système étudié,
+en représentant les classes et les relations entre eux.
+Rapport de projet de fin d’études 25
+Chapitre 2. Analyse et planification du projet
+• Le diagramme des cas d’utilisation permet l’énumération des fonctions de
+l’application du point de vue de l’utilisateur.
+• Le diagramme des séquences permet une représentation temporelle et comportementale des objets et de leurs interactions.
+II.5.2 Diagramme de cas d’utilisation global
+La figure II.1 présente un regroupement des cas d’utilisation fondamentaux, offrant
+ainsi une vue d’ensemble cohérente du fonctionnement global de notre système.
+Rapport de projet de fin d’études 26
+Chapitre 2. Analyse et planification du projet
+Figure II.1 – Diagramme de cas d’utilisation global
+Rapport de projet de fin d’études 27
+Chapitre 2. Analyse et planification du projet
+II.5.3 Diagramme des classes
+Dans la figure II.2, nous présentons le diagramme de classe global.
+Figure II.2 – Diagramme de classe global
+II.6 Architecture du projet
+L’architecture est le point de départ pour créer une application bien structurée, en fait
+une architecture décrit la manière dont les éléments sont organisés. Dans cette section,
+nous montrons le choix opté pour l’organisation physique et logique de notre projet :
+II.6.1 Architecture physique
+J’ai opté pour une architecture en trois tiers, qui s’appuie sur le modèle MVC
+(Modèle-Vue-Contrôleur). Cette approche permet une séparation claire des responsabilités entre les différentes couches de l’application.
+Rapport de projet de fin d’études 28
+Chapitre 2. Analyse et planification du projet
+L’architecture se décline comme suit :
+Figure II.3 – Architecture 3-tiers
+— Serveur web : : Ce premier tiers assure la présentation de l’application. Il s’appuie
+sur un navigateur web pour établir une communication avec le serveur d’application,
+transmettant les demandes sous forme de requêtes HTTP.
+— Serveur d’ application : : l constitue le cœur du système. Cette couche prend
+en charge le traitement des requêtes ainsi que l’exécution de la logique métier.
+— Serveur base de données : : Ce dernier tiers est dédié à la gestion et à la persistance des données. Il assure les échanges de données avec le serveur d’application
+via un mécanisme d’accès sécurisé et structuré.
+II.6.2 Architecture logique
+Dans l’ architecture 3-tiers, nous avons utilisé le modèle de conception MVC comme
+architecture logique. L’architecture logicielle s’intéresse plutôt au découpage logique de
+l’application et la façon de regrouper les composants selon le type de fonction et traitements qu’ils effectuent. La figure II.4 montre le schéma de l’architecture logique détaillée
+de notre projet.
+• Modèle : c’estlacouched’accèsauxdonnéesqui permet le stockage et la récupération
+des données traitées par la couche applicative.
+• Vue : Elle correspond à la couche présentation puisque c’ est la partie visible qui
+permet à l’ utilisateur d’ interagir avec l’application. Elle affiche les données qu’elle
+Rapport de projet de fin d’études 29
+Chapitre 2. Analyse et planification du projet
+a récupérées auprès de la couche applicative en se basant sur le protocole de communication Http
+• Contrôleur : cette couche représente la logique métier qui gère les requêtes des
+utilisateurs puis retourne une réponse à l’ aide mutuelle des couches Modèle et Vue.
+La couche Contrôleur est composée par des différents modules d’application :
+— Couche d’accès aux données (DAO) : cette couche contient les classes d’accès
+à la base de données et de traitement des requêtes sur les entités.
+— Couche de service métier : elle contient les classes de traitement de logique
+métier.
+— Couche d’exposition des services : cette couche contient les classes d’exposition
+des services REST (ou web services) de notre application.
+— Couche de sécurité : une couche supplémentaire qui traite la partie authentification et autorisation de notre solution
+Figure II.4 – Architecture logique
+II.7 Environnement de travail
+Au cours de cette phase, nous présentons les outils et les langages de programmation
+utilisés pour la réalisation du projet, vu que le bon choix de l’environnement de travail
+est un pas très important.
+Rapport de projet de fin d’études 30
+Chapitre 2. Analyse et planification du projet
+II.7.1 Environnement matériel
+Les spécifications du PC portable que nous avons utilisé pour bien mener notre projet
+sont les suivantes :
+• Marque : Lenovo
+• Processeur : Intel Core i5-1135G7, 11é Génération, up to 4.2 GHz
+• Disque dur : 1 To
+• Mémoire RAM : 16 Go
+• Système d’exploitation : Windows 11
+II.7.2 Environnement logiciel
+Dans cette section, nous présentons les différents outils et environnements de développement utilisés lors de la conception du système.
+• Angular 12 : Angular est un framework JavaScript développé par Google, basé
+sur TypeScript. Il permet de créer des applications web de type SPA (Single Page
+Application), accessibles via une seule page web.
+Figure II.5 – Logo de Angular
+Rapport de projet de fin d’études 31
+Chapitre 2. Analyse et planification du projet
+• Spring Boot : Spring Boot est un framework Java qui simplifie le démarrage et
+le développement d’applications Spring. Il réduit la configuration manuelle grâce
+à l’intégration de serveurs embarqués, ce qui permet une exécution autonome des
+applications web.
+Figure II.6 – Logo de Spring Boot
+• MySQL Connector Java : Pour faciliter l’interaction avec la base de données
+MySQL, nous avons utilisé le connecteur MySQL Connector Java, intégré via
+Spring Data JPA. Il fournit une couche d’abstraction simplifiant les opérations
+de persistance en Java.
+• MySQL : MySQL est un système de gestion de bases de données relationnelles
+open source. Il repose sur le langage SQL et permet de stocker et gérer efficacement
+des volumes importants de données.
+Figure II.7 – Logo de MySQL
+• GitHub Desktop : GitHub Desktop est une application permettant de gérer visuellement les dépôts Git hébergés sur GitHub. Elle facilite la synchronisation, le
+suivi des modifications et les contributions au code source de manière intuitive.
+Figure II.8 – Logo de GitHub Desktop
+Rapport de projet de fin d’études 32
+Chapitre 2. Analyse et planification du projet
+• Visual Studio Code : Visual Studio Code est un éditeur de code multiplateforme
+développé par Microsoft. Il propose des fonctionnalités telles que le débogage, l’autocomplétion, la gestion Git, la coloration syntaxique et la refactorisation.
+Figure II.9 – Logo de Visual Studio Code
+• IntelliJ IDEA : IntelliJ IDEAIntelliJ IDEA est un environnement de développement intégré (IDE) pour le langage Java. Il offre de puissants outils de productivité comme la navigation intelligente, l’analyse de code, la gestion de projet Maven/Gradle, et une intégration complète avec Spring Boot.
+Figure II.10 – Logo de IntelliJ IDEA
+II.8 Conclusion
+Ce chapitre a permis d’identifier les principaux éléments nécessaires au bon déroulement du projet : les acteurs, les besoins, l’organisation agile (backlog, sprints), les modèles
+UML et les outils utilisés. Il constitue une base solide pour démarrer le développement
+détaillé à travers les différents sprints.
+Rapport de projet de fin d’études 33
+CHAPITRE III
+SPRINT 1
+Sommaire
+III.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+III.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . 35
+III.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . 35
+III.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . 36
+III.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . 36
+III.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . 36
+III.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+Rapport de projet de fin d’études 34
+Sprint 1
+III.1 Introduction
+A
+III.2 Spécification et analyse des besoins
+III.2.1 Backlog du sprint
+Rapport de projet de fin d’études 35
+Sprint 1
+ID User
+Story
+User Story Priorité
+US-1.1
+En tant qu’utilisateur, je souhaite m’inscrire
+à travers un formulaire pour créer un compte
+sur la plateforme.
+P1
+US-2.1
+En tant qu’utilisateur, je souhaite m’authentifier à travers un login et un mot de passe
+afin d’accéder à mon espace.
+P1
+US-3.1
+En tant qu’utilisateur, je souhaite que ma
+session soit personnalisée selon mon rôle pour
+accéder uniquement aux fonctionnalités qui
+me concernent.
+P1
+Table III.1 – Backlog du Sprint 1
+III.2.2 Diagramme de cas d’utilisation
+III.3 Description détaillée des cas d’utilisation
+III.4 Diagrammes de séquence
+III.5 Réalisation
+Rapport de projet de fin d’études 36
+CHAPITRE IV
+SPRINT 2
+Sommaire
+IV.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+IV.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . 38
+IV.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+IV.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . 41
+IV.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . 41
+IV.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . 41
+IV.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+Rapport de projet de fin d’études 37
+Sprint 2
+IV.1 Introduction
+A
+IV.2 Spécification et analyse des besoins
+IV.2.1 Backlog du sprint
+Rapport de projet de fin d’études 38
+Sprint 2
+ID User
+Story
+User Story Priorité
+US-4.1
+En tant qu’administrateur, je souhaite créer,
+modifier et supprimer des comptes utilisateurs.
+P1
+US-4.2
+En tant qu’administrateur, je souhaite gérer
+les rôles des utilisateurs.
+P1
+US-4.3
+En tant qu’administrateur, je souhaite
+Consulter la liste des utilisateurs.
+P1
+US-5.1
+En tant qu’administrateur, je souhaite créer,
+modifier et supprimer des groupes.
+P1
+US-5.2
+En tant qu’administrateur, je souhaite affecter les intervenants aux groupes.
+P1
+US-5.3
+En tant qu’administrateur, je souhaite
+consulter la liste des groupes.
+P1
+Rapport de projet de fin d’études 39
+Sprint 2
+US-6.1
+En tant qu’administrateur, je souhaite créer,
+modifier et supprimer des sous-groupes.
+P1
+US-6.2
+En tant qu’administrateur, je souhaite affecter les sous-groupes aux groupes.
+P1
+US-6.3
+En tant qu’administrateur, je souhaite
+consulter la liste des sous-groupes.
+P1
+US-7.1
+En tant qu’administrateur, je souhaite rechercher les tickets par mot-clé, groupe, statut ...
+P2
+US-8.1
+En tant qu’administrateur, je souhaite rechercher les utilisateurs par nom, email ou
+rôle.
+P2
+US-9.1
+En tant qu’administrateur, je souhaite visualiser des statistiques sur les tickets.
+P2
+Table IV.1 – Backlog du Sprint 2
+Rapport de projet de fin d’études 40
+Sprint 2
+IV.2.2 Diagramme de cas d’utilisation
+IV.3 Description détaillée des cas d’utilisation
+IV.4 Diagrammes de séquence
+IV.5 Réalisation
+Rapport de projet de fin d’études 41
+CHAPITRE V
+SPRINT 3
+Sommaire
+V.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+V.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . 43
+V.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . 43
+V.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . 45
+V.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . 45
+V.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . 45
+V.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 45
+Rapport de projet de fin d’études 42
+Sprint 3
+V.1 Introduction
+A
+V.2 Spécification et analyse des besoins
+V.2.1 Backlog du sprint
+Rapport de projet de fin d’études 43
+Sprint 3
+ID User
+Story
+User Story Priorité
+US-10.1
+En tant qu’utilisateur normal, je souhaite
+créer un ticket d’intervention à travers un
+formulaire en indiquant les informations nécessaires (sujet, type d’inetervention, degré
+d’urgence, groupe, sous-groupe, etc...).
+P1
+US-11.1
+En tant qu’utilisateur normal, je souhaite
+suivre l’état de mes tickets.
+P1
+US-11.2
+En tant qu’utilisateur normal, je souhaite
+ajouter des commentaires aux tickets pour
+fournir des informations complémentaires ou
+échanger avec les intervenants.
+P1
+US-11.3
+En tant qu’utilisateur normal, je souhaite
+joindre des fichiers dans les tickets pour enrichir ou clarifier les informations.
+P1
+Rapport de projet de fin d’études 44
+Sprint 3
+US-12.1
+En tant qu’utilisateur normal, je souhaite rechercher mes tickets par mot-clé, groupe, statut ...
+P1
+US-13.1
+En tant qu’utilisateur normal, je souhaite recevoir une notification lorsque mon ticket est
+clôturé.
+P1
+Table V.1 – Backlog du Sprint 3
+V.2.2 Diagramme de cas d’utilisation
+V.3 Description détaillée des cas d’utilisation
+V.4 Diagrammes de séquence
+V.5 Réalisation
+Rapport de projet de fin d’études 45
+CHAPITRE VI
+SPRINT 4
+Sommaire
+VI.1 Introduction . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+VI.2 Spécification et analyse des besoins . . . . . . . . . . . . . . . . 47
+VI.2.1 Backlog du sprint . . . . . . . . . . . . . . . . . . . . . . . . . . 47
+VI.2.2 Diagramme de cas d’utilisation . . . . . . . . . . . . . . . . . . 49
+VI.3 Description détaillée des cas d’utilisation . . . . . . . . . . . . 49
+VI.4 Diagrammes de séquence . . . . . . . . . . . . . . . . . . . . . . 49
+VI.5 Réalisation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 49
+Rapport de projet de fin d’études 46
+Sprint 4
+VI.1 Introduction
+A
+VI.2 Spécification et analyse des besoins
+VI.2.1 Backlog du sprint
+Rapport de projet de fin d’études 47
+Sprint 4
+ID User
+Story
+User Story Priorité
+US-14.1
+En tant qu’intervenant, je souhaite consulter
+les tickets et les prendre en charge.
+P1
+US-14.2
+En tant qu’intervenant, je souhaite mettre à
+jour l’état des tickets pris en charge.
+P1
+US-14.3
+En tant qu’intervenant, je souhaite ajouter
+des commentaires aux tickets.
+P1
+US-14.4
+En tant qu’intervenant, je souhaite joindre
+des fichiers dans les tickets.
+P1
+Rapport de projet de fin d’études 48
+Sprint 4
+US-15.1
+En tant qu’intervenant, je souhaite rechercher les tickets assignés par mot-clé, groupe,
+statut.
+P2
+US-16.1
+En tant qu’intervenant, je souhaite recevoir
+une notification dès qu’un ticket est créé et
+attribué à mon groupe d’appartenance.
+P2
+Table VI.1 – Backlog du Sprint 4
+VI.2.2 Diagramme de cas d’utilisation
+VI.3 Description détaillée des cas d’utilisation
+VI.4 Diagrammes de séquence
+VI.5 Réalisation
+Rapport de projet de fin d’études 49

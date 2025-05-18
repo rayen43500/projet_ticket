@@ -1,0 +1,118 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Gestion des Sous-Groupes</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <div class="input-group">
+        <label class="input-group-text" for="groupeFilter">Filtrer par groupe</label>
+        <select class="form-select" id="groupeFilter" [(ngModel)]="selectedGroupeId" (change)="filterByGroupe()">
+          <option [ngValue]="null">Tous les groupes</option>
+          <option *ngFor="let groupe of groupes" [ngValue]="groupe.id">{{ groupe.nom }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary" (click)="openAddModal()">
+        <i class="bi bi-plus-circle"></i> Ajouter un sous-groupe
+      </button>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nom</th>
+          <th>Groupe parent</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sousGroupe of filteredSousGroupes">
+          <td>{{ sousGroupe.id }}</td>
+          <td>{{ sousGroupe.nom }}</td>
+          <td>{{ getGroupeName(sousGroupe.groupe?.id) }}</td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-warning" (click)="openEditModal(sousGroupe)">
+                <i class="bi bi-pencil"></i> Modifier
+              </button>
+              <button class="btn btn-sm btn-danger ms-2" (click)="deleteSousGroupe(sousGroupe.id!)">
+                <i class="bi bi-trash"></i> Supprimer
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="filteredSousGroupes.length === 0">
+          <td colspan="4" class="text-center">Aucun sous-groupe trouvé</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Ajout -->
+  <div class="modal" [class.show]="showAddModal" [style.display]="showAddModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter un sous-groupe</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="nom" class="form-label">Nom</label>
+              <input type="text" class="form-control" id="nom" [(ngModel)]="newSousGroupe.nom" name="nom" required>
+            </div>
+            <div class="mb-3">
+              <label for="groupe" class="form-label">Groupe parent</label>
+              <select class="form-select" id="groupe" [(ngModel)]="newSousGroupe.groupe!.id" name="groupe" required>
+                <option [ngValue]="0" disabled>Sélectionnez un groupe</option>
+                <option *ngFor="let groupe of groupes" [ngValue]="groupe.id">{{ groupe.nom }}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="addSousGroupe()">Ajouter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Modification -->
+  <div class="modal" [class.show]="showEditModal" [style.display]="showEditModal ? 'block' : 'none'" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Modifier le sous-groupe</h5>
+          <button type="button" class="btn-close" (click)="closeModals()"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="editNom" class="form-label">Nom</label>
+              <input type="text" class="form-control" id="editNom" [(ngModel)]="selectedSousGroupe.nom" name="editNom" required>
+            </div>
+            <div class="mb-3">
+              <label for="editGroupe" class="form-label">Groupe parent</label>
+              <select class="form-select" id="editGroupe" [(ngModel)]="selectedSousGroupe.groupe!.id" name="editGroupe" required>
+                <option [ngValue]="0" disabled>Sélectionnez un groupe</option>
+                <option *ngFor="let groupe of groupes" [ngValue]="groupe.id">{{ groupe.nom }}</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModals()">Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="updateSousGroupe()">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Backdrop pour les modals -->
+  <div class="modal-backdrop fade show" *ngIf="showAddModal || showEditModal"></div>
+</div>

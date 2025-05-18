@@ -1,0 +1,237 @@
+/* ========================
+   GLOBAL STYLES (Styles généraux)
+   ======================== */
+   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+   .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    color: #fff;
+
+    /* Image de fond avec superposition de dégradé */
+    background: 
+      linear-gradient(135deg, rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
+      url('/assets/Header_Img.png') center center / cover no-repeat;
+      backdrop-filter: blur(3px);
+      background-attachment: fixed; /* Fixe l'image pour l'effet de parallaxe */
+    }
+  
+   /* ========================
+      LOGIN CARD (Carte de connexion)
+      ======================== */
+   .login-card {
+     display: flex;
+     flex-direction: row; /* Positionnement en ligne (section bienvenue + formulaire) */
+     background: rgba(255, 255, 255, 0.1); /* Fond semi-transparent */
+     border-radius: 15px; 
+     overflow: hidden; /* Cache les éléments qui dépassent */
+     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2); /* Ombre pour donner de la profondeur */
+     backdrop-filter: blur(10px); /* Flou d'arrière-plan */
+     width: 100%;
+     max-width: 900px; 
+   }
+   
+   /* ========================
+      WELCOME SECTION (Section bienvenue)
+      ======================== */
+   .welcome-section {
+     flex: 1; /* Prend la moitié de l'espace disponible */
+     padding: 2rem;
+     background: rgba(255, 255, 255, 0.1); 
+     display: flex;
+     flex-direction: column;
+     justify-content: center; 
+   }
+   
+   .welcome-section h1 {
+     font-size: 2.5rem;
+     margin-bottom: 1rem;
+     font-weight: 600;
+   }
+   
+   .welcome-section p {
+     font-size: 1rem;
+     line-height: 1.6;
+     color: rgba(255, 255, 255, 0.85); /* Couleur légèrement transparente */
+   }
+   
+   /* ========================
+      LOGIN SECTION (Section de connexion)
+      ======================== */
+   .login-section {
+     flex: 1; /* Prend la moitié de l'espace disponible */
+     padding: 2rem; /* Espacement autour du contenu */
+     background: rgba(255, 255, 255, 0.95); /* Fond légèrement transparent */
+     color: #333; 
+     display: flex;
+     flex-direction: column;
+   }
+   
+   .login-section h2 {
+     font-size: 1.8rem;
+     margin-bottom: 1.5rem;
+     color: #1e3c72; 
+     font-weight: 600;
+     text-align: center; 
+   }
+   
+   /* ========================
+      FORM STYLES (Styles du formulaire)
+      ======================== */
+   .login-form {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem; /* Espacement entre les champs */
+   }
+
+   .form-group {
+     display: flex;
+     flex-direction: column;
+     gap: 0.3rem;
+     margin-bottom: 1rem;
+     width: 100%;
+   }
+   
+   /* ========================
+      INPUT ICON STYLES (Styles des champs de saisie avec icônes)
+      ======================== */
+   .input-icon {
+     position: relative; /* pour placer l'icône dans le champ */
+     display: flex;
+     align-items: center;
+     width: 100%;
+   }
+   
+   /* Style des champs de saisie */
+   .input-icon input {
+     width: 100%; 
+     padding: 0.75rem 0.75rem 0.75rem 38px; 
+     border: none; 
+     border-bottom: 2px solid #ccc; /* Bordure en bas pour les champs */
+     background: transparent; 
+     font-size: 1rem; 
+     transition: border-color 0.3s ease; /* Animation au focus */
+   }
+   
+   /* Style générique pour tous les champs de saisie */
+   input {
+     border-radius: 0;
+     border: none; /* Pas de bordure générale */
+     border-bottom: 2px solid #ccc; /* Bordure en bas pour chaque champ */
+     background: transparent; /* Fond transparent */
+     font-size: 1rem;
+     transition: border-color 0.3s ease; /* Animation de la couleur de la bordure */
+   }
+
+   .input-icon input:focus {
+     outline: none; /* Supprime le cadre par défaut */
+     box-shadow: none; /* Supprime l'ombre du focus */
+     border-bottom-color: #1e3c72; 
+   }
+   
+   /* Positionnement et style des icônes dans les champs de saisie */
+   .input-icon i {
+     position: absolute; 
+     left: 10px; 
+     color: #2a5298;
+     font-size: 1.1rem;
+   }
+   
+   /* ========================
+      PASSWORD TOGGLE (Affichage/Masquage du mot de passe)
+      ======================== */
+   .toggle-password {
+     cursor: pointer; 
+   }
+   
+   /* ========================
+     REQUIRED ASTERISK
+     ======================== */
+  .required-inside {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: red;
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
+  
+  .required {
+    color: red;
+    margin-right: 5px;
+  }
+  /* ========================
+     INPUT VALIDATION
+     ======================== */
+     input.invalid {
+      border-color: #e74c3c !important;
+    }
+    
+    input.valid {
+      border-color: #1e3c72 !important;
+    }
+
+       /* ========================
+      error message 
+      ======================== */
+      .error-message {
+        color: #e74c3c;
+        background: transparent;
+        padding: 4px 0;
+        font-size: 15px;
+        font-weight: 400;
+        text-align: left;
+        padding-left: 10px;
+        transition: color 0.3s ease, border-color 0.3s ease;
+      }      
+      
+   /* ========================
+      LOGIN BUTTON 
+      ======================== */
+   .login-button {
+     background: #1e3c72;
+     color: white;
+     padding: 0.75rem;
+     border: none;
+     border-radius: 6px; /* Coins arrondis */
+     font-size: 1rem;
+     font-weight: 500;
+     cursor: pointer;
+     transition: background 0.3s ease; /* Transition pour l'effet au survol */
+   }
+   
+   .login-button:disabled {
+     background: #999;
+     cursor: not-allowed; 
+     opacity: 0.6; /* Opacité réduite pour montrer que c'est désactivé */
+     pointer-events: none; /* Désactive les événements du bouton */
+   }
+   
+   .login-button:hover {
+     background: #2a5298; 
+   }
+   
+   /* ========================
+      REGISTER LINK (Lien vers l'inscription)
+      ======================== */
+   .register-link {
+     margin-top: 1.5rem;
+     text-align: center;
+     color: #666;
+   }
+   
+   /* Style du lien d'inscription */
+   .register-link a {
+     color: #1e3c72; /* Couleur bleue du lien */
+     text-decoration: none;
+     font-weight: 600;
+   }
+   
+   /* Effet au survol du lien */
+   .register-link a:hover {
+     text-decoration: underline; /* Souligne le lien */
+   }
+   

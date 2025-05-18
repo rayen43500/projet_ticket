@@ -1,0 +1,158 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Tableau de bord administrateur</h1>
+    <div class="date-display">{{ today | date: 'EEEE dd MMMM yyyy' }}</div>
+  </div>
+
+  <!-- Statistics Summary Cards -->
+  <div class="stats-cards">
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <i class="material-icons">people</i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ userStats.total }}</h3>
+        <p>Utilisateurs</p>
+      </div>
+      <div class="stat-footer">
+        <span class="trend up">
+          <i class="material-icons">trending_up</i> {{ userStats.percentChange }}%
+        </span>
+        <span class="period">Ce mois</span>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <i class="material-icons">group</i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ groupStats.total }}</h3>
+        <p>Groupes</p>
+      </div>
+      <div class="stat-footer">
+        <span class="trend neutral">
+          <i class="material-icons">trending_flat</i> {{ groupStats.percentChange }}%
+        </span>
+        <span class="period">Ce mois</span>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon purple">
+        <i class="material-icons">folder</i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ subgroupStats.total }}</h3>
+        <p>Sous-groupes</p>
+      </div>
+      <div class="stat-footer">
+        <span class="trend up">
+          <i class="material-icons">trending_up</i> {{ subgroupStats.percentChange }}%
+        </span>
+        <span class="period">Ce mois</span>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon orange">
+        <i class="material-icons">all_inbox</i>
+      </div>
+      <div class="stat-info">
+        <h3>{{ ticketStats.total }}</h3>
+        <p>Tickets</p>
+      </div>
+      <div class="stat-footer">
+        <span class="trend up">
+          <i class="material-icons">trending_up</i> {{ ticketStats.percentChange }}%
+        </span>
+        <span class="period">Ce mois</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Charts Section -->
+  <div class="charts-container">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Tickets par statut</h3>
+        <div class="chart-controls">
+          <select [(ngModel)]="ticketChartPeriod">
+            <option value="week">Cette semaine</option>
+            <option value="month">Ce mois</option>
+            <option value="year">Cette année</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-body">
+        <canvas id="ticketStatusChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Utilisateurs par rôle</h3>
+      </div>
+      <div class="chart-body">
+        <canvas id="userRolesChart"></canvas>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Second Row of Charts -->
+  <div class="charts-container">
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Tickets par groupe</h3>
+      </div>
+      <div class="chart-body">
+        <canvas id="ticketsPerGroupChart"></canvas>
+      </div>
+    </div>
+    
+    <div class="chart-card">
+      <div class="chart-header">
+        <h3>Activité récente</h3>
+      </div>
+      <div class="chart-body activity-list">
+        <div class="activity-item" *ngFor="let activity of recentActivity">
+          <div class="activity-icon">
+            <i class="material-icons">{{ activity.icon }}</i>
+          </div>
+          <div class="activity-details">
+            <div class="activity-title">{{ activity.title }}</div>
+            <div class="activity-subtitle">{{ activity.subtitle }}</div>
+          </div>
+          <div class="activity-time">{{ activity.time | date: 'shortTime' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Quick Actions Section -->
+  <div class="quick-actions">
+    <h3>Actions rapides</h3>
+    <div class="action-buttons">
+      <button class="action-button" routerLink="/admin/users">
+        <i class="material-icons">person_add</i>
+        <span>Ajouter un utilisateur</span>
+      </button>
+      <button class="action-button" routerLink="/admin/groups">
+        <i class="material-icons">group_add</i>
+        <span>Créer un groupe</span>
+      </button>
+      <button class="action-button" routerLink="/admin/subgroups">
+        <i class="material-icons">create_new_folder</i>
+        <span>Ajouter un sous-groupe</span>
+      </button>
+      <button class="action-button" (click)="downloadReport()">
+        <i class="material-icons">download</i>
+        <span>Télécharger le rapport</span>
+      </button>
+      <button class="action-button logout-action" (click)="logout()">
+        <i class="material-icons">exit_to_app</i>
+        <span>Déconnexion</span>
+      </button>
+    </div>
+  </div>
+</div>

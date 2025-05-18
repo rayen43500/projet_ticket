@@ -1,0 +1,145 @@
+<div class="view-ticket-container">
+  <div class="sidebar">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Logo" />
+      <h3>Helpdesk</h3>
+    </div>
+    <nav class="menu">
+      <a routerLink="/user/dashboard" routerLinkActive="active">
+        <i class="material-icons">dashboard</i>
+        <span>Tableau de bord</span>
+      </a>
+      <a routerLink="/user/my-tickets" routerLinkActive="active">
+        <i class="material-icons">list</i>
+        <span>Mes tickets</span>
+      </a>
+      <a routerLink="/user/create-ticket" routerLinkActive="active">
+        <i class="material-icons">add_circle</i>
+        <span>Créer un ticket</span>
+      </a>
+      <a routerLink="/user/profile" routerLinkActive="active">
+        <i class="material-icons">person</i>
+        <span>Mon profil</span>
+      </a>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <div class="header">
+      <button class="back-button" (click)="goBack()">
+        <i class="material-icons">arrow_back</i>
+        Retour
+      </button>
+      <h1>Détails du Ticket</h1>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div class="error-message" *ngIf="error">
+      <i class="material-icons">error</i>
+      <p>{{ error }}</p>
+      <button class="retry-button" *ngIf="ticket?.id !== undefined" (click)="loadTicket(ticket!.id)">Réessayer</button>
+    </div>
+
+    <!-- Indicateur de chargement -->
+    <div class="loading" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Chargement des détails du ticket...</p>
+    </div>
+
+    <!-- Contenu du ticket -->
+    <div class="ticket-content" *ngIf="!loading && ticket">
+      <div class="ticket-header">
+        <div class="ticket-title">
+          <h2>{{ ticket.sujet }}</h2>
+          <span class="ticket-id">#{{ ticket.id }}</span>
+        </div>
+        <span class="ticket-status" [ngClass]="getStatusClass(ticket.statut)">
+          {{ ticket.statut }}
+        </span>
+      </div>
+
+      <div class="ticket-info">
+        <div class="info-group">
+          <div class="info-item">
+            <span class="info-label">Créé par</span>
+            <span class="info-value">{{ ticket.createurNom }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Date de création</span>
+            <span class="info-value">{{ formatDate(ticket.dateCreation) }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Priorité</span>
+            <span class="info-value priority" [ngClass]="getPriorityClass(ticket.urgence)">
+              {{ ticket.urgence }}
+            </span>
+          </div>
+        </div>
+        <div class="info-group">
+          <div class="info-item">
+            <span class="info-label">Type</span>
+            <span class="info-value">{{ ticket.type }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Groupe</span>
+            <span class="info-value">{{ ticket.groupeNom }}</span>
+          </div>
+          <div class="info-item" *ngIf="ticket.sousGroupeNom">
+            <span class="info-label">Sous-groupe</span>
+            <span class="info-value">{{ ticket.sousGroupeNom }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket-description">
+        <h3>Description</h3>
+        <p>{{ ticket.description }}</p>
+      </div>
+
+      <!-- Pièces jointes -->
+      <div class="ticket-attachments" *ngIf="ticket.piecesJointes && ticket.piecesJointes.length > 0">
+        <h3>Pièces jointes</h3>
+        <div class="attachments-list">
+          <div class="attachment-item" *ngFor="let piece of ticket.piecesJointes">
+            <i class="material-icons">attach_file</i>
+            <span>{{ piece.nomFichier }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Commentaires -->
+      <div class="ticket-comments">
+        <h3>Commentaires</h3>
+        <div class="comments-list" *ngIf="ticket.commentaires && ticket.commentaires.length > 0">
+          <div class="comment" *ngFor="let comment of ticket.commentaires">
+            <div class="comment-header">
+              <div class="comment-author">
+                <img src="assets/images/user-avatar.png" alt="Avatar" />
+                <span>{{ comment.auteurNom }}</span>
+              </div>
+              <span class="comment-date">{{ formatDate(comment.dateCreation) }}</span>
+            </div>
+            <div class="comment-content">
+              {{ comment.contenu }}
+            </div>
+          </div>
+        </div>
+        <div class="no-comments" *ngIf="!ticket.commentaires || ticket.commentaires.length === 0">
+          <p>Aucun commentaire pour ce ticket.</p>
+        </div>
+
+        <!-- Formulaire d'ajout de commentaire -->
+        <div class="add-comment">
+          <h4>Ajouter un commentaire</h4>
+          <div class="comment-form">
+            <textarea [(ngModel)]="newComment" placeholder="Votre commentaire..."></textarea>
+            <button (click)="addComment()" [disabled]="!newComment.trim()">
+              <i class="material-icons">send</i>
+              Envoyer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

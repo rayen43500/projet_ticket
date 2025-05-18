@@ -1,0 +1,97 @@
+.hero-section {
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  overflow: hidden;
+
+  /* Image de fond avec superposition de dégradé */
+  background: 
+    linear-gradient(135deg, rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
+    url('/assets/lol.jpg') center center / cover no-repeat;
+    backdrop-filter: blur(3px); /* flou doux pour un effet de profondeur */
+    background-attachment: fixed; /* Fixe l'image pour l'effet de parallaxe */
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2; /* au-dessus de l'overlay */
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+  animation: fadeInUp 1s ease-in-out; /* animation à l'apparition */
+  animation-delay: 3s; /* Délais l'animation */
+}
+
+.hero-content h1 {
+  font-size: 2.7rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+}
+
+.hero-content h1 span {
+  color: #ffd700; /* Jaune or */
+  background: linear-gradient(-60deg, #ffd700, #ffffff); /* Dégradé sur texte */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  color: #e0e0e0;
+}
+
+.cta-button {
+  background: #fff;
+  color: #1e3c72;
+  padding: 0.8rem 2.3rem;
+  border: none;
+  border-radius: 40px; 
+  text-decoration: none;
+  font-weight: 550;
+  font-size: 1.1rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
+}
+
+.cta-button:hover {
+  background: #debd00;
+  transform: translateY(-4px) scale(1.02); /* effet de hover */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.cta-button:active {
+  transform: scale(1); 
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation d’apparition du haut vers le bas */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* Responsive : ajustement sur petits écrans */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.2rem; 
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+}

@@ -1,0 +1,285 @@
+.navbar {
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  height: 70px;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  height: 100%;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Brand Section */
+.navbar-brand-section {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo {
+  width: 40px;
+  height: auto;
+  transition: transform 0.2s ease;
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-left: 10px;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .brand-name {
+    display: inline;
+  }
+}
+
+/* Middle Section - Search */
+.navbar-middle {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f7f9fc;
+  border-radius: 8px;
+  padding: 8px 15px;
+  width: 100%;
+  max-width: 400px;
+  transition: all 0.3s ease;
+}
+
+.search-bar:focus-within {
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+  background-color: #ffffff;
+}
+
+.search-bar i {
+  color: #a0aec0;
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #4a5568;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #a0aec0;
+}
+
+/* Right Section - User Controls */
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+  background-color: #f7f9fc;
+}
+
+.icon-button i {
+  color: #4a5568;
+  font-size: 20px;
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: #e53e3e;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.user-info:hover {
+  background-color: #f7f9fc;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d3748;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .user-name {
+    display: inline;
+  }
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e2e8f0;
+}
+
+/* Auth Controls for non-logged users */
+.auth-controls .navbar-nav {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 10px;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #4a5568;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #3182ce;
+  background-color: #f7f9fc;
+}
+
+.nav-link.active {
+  color: #3182ce;
+  font-weight: 600;
+}
+
+.login-btn {
+  background-color: #4299e1;
+  color: white !important;
+}
+
+.login-btn:hover {
+  background-color: #3182ce;
+  color: white !important;
+}
+
+/* Logout button styling */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: #f56565;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #e53e3e;
+}
+
+.logout-btn i {
+  font-size: 18px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-middle {
+    display: none;
+  }
+  
+  .auth-controls .navbar-nav {
+    flex-direction: column;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+    z-index: 1000;
+    width: 180px;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .auth-controls:hover .navbar-nav {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .logout-btn span {
+    display: none;
+  }
+  
+  .logout-btn {
+    padding: 8px;
+  }
+}
+
+

@@ -1,0 +1,239 @@
+/* ========================
+   GLOBAL STYLES
+   ======================== */
+   .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1rem;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff;
+
+    /* Image de fond avec superposition de dégradé */
+    background: 
+      linear-gradient(135deg, rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
+      url('/assets/Header_Img.png') center center / cover no-repeat;
+      backdrop-filter: blur(3px);   
+      background-attachment: fixed; /* Fixe l'image pour l'effet de parallaxe */ 
+  }
+  
+  /* ========================
+     REGISTER CARD
+     ======================== */
+  .register-card {
+    display: flex;
+    flex-direction: row;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 900px;
+  }
+  
+  /* ========================
+     WELCOME SECTION
+     ======================== */
+  .welcome-section {
+    flex: 1;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .welcome-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .welcome-section p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  
+  /* ========================
+     REGISTER SECTION
+     ======================== */
+  .register-section {
+    flex: 1;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .register-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: #1e3c72;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  /* ========================
+     FORM STYLES
+     ======================== */
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+  
+  /* ========================
+     INPUT ICON STYLES
+     ======================== */
+  .input-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .input-icon input {
+    width: 100%;
+    padding: 0.75rem 0.75rem 0.75rem 38px; /* espace pour icône */
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background: transparent;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  input {
+    border-radius: 0; 
+    border: none; 
+    border-bottom: 2px solid #ccc;
+    background: transparent;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }  
+  
+  .input-icon input:focus {
+    outline: none;
+    box-shadow: none; /* Supprime le cadre bleu */
+    border-bottom-color: #1e3c72;
+  }
+  
+  .input-icon i {
+    position: absolute;
+    left: 10px;
+    color: #2a5298;
+    font-size: 1.1rem;
+  }
+  
+  .toggle-password {
+    cursor: pointer;
+  }
+  
+  /* ========================
+     INPUT VALIDATION
+     ======================== */
+     input.invalid {
+      border-color: #e74c3c !important;
+    }
+    
+    input.valid {
+      border-color: #1e3c72 !important;
+    } 
+  
+  /* ========================
+     PASSWORD STRENGTH INDICATOR
+     ======================== */
+  .strength-indicator {
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+  
+  .weak-password {
+    color: red;
+  }
+  
+  .medium-password {
+    color: orange;
+  }
+  
+  .strong-password {
+    color: green;
+  }
+  
+  /* ========================
+     REQUIRED ASTERISK
+     ======================== */
+  .required-inside {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: red;
+    font-size: 1.2rem;
+    pointer-events: none;
+  }
+  
+  .required {
+    color: red;
+    margin-right: 5px;
+  }
+  
+  /* ========================
+     REGISTER BUTTON
+     ======================== */
+  .register-button {
+    background: #1e3c72;
+    color: white;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .register-button:disabled {
+    background: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  .register-button:hover:not(:disabled) {
+    background: #2a5298;
+  }
+  
+  /* ========================
+     LOGIN LINK
+     ======================== */
+  .login-link {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #666;
+  }
+  
+  .login-link a {
+    color: #1e3c72;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+  

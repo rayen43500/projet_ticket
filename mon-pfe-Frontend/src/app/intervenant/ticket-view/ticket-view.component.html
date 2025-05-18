@@ -1,0 +1,148 @@
+<div class="ticket-view-container">
+  <div class="action-header">
+    <button class="back-btn" (click)="goBack()">
+      <i class="material-icons">arrow_back</i> Retour
+    </button>
+    <h1>Détails du ticket #{{ticket?.id}}</h1>
+  </div>
+
+  <!-- Loader et erreur -->
+  <div class="loader-container" *ngIf="loading">
+    <div class="loader"></div>
+    <p>Chargement des détails...</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Détails du ticket -->
+  <div class="ticket-details" *ngIf="ticket && !loading">
+    <div class="ticket-header">
+      <div class="ticket-title">
+        <h2>{{ ticket.sujet }}</h2>
+        <div class="ticket-meta">
+          <span class="ticket-date">Créé le: {{ formatDate(ticket.dateCreation) }}</span>
+          <span class="ticket-creator">Par: {{ ticket.createur?.nom || 'Inconnu' }}</span>
+        </div>
+      </div>
+      <div class="ticket-badges">
+        <span class="status-badge" [ngClass]="getStatusClass(ticket.statut)">
+          {{ ticket.statut }}
+        </span>
+        <span class="urgency-badge" [ngClass]="getUrgencyClass(ticket.urgence)">
+          {{ ticket.urgence }}
+        </span>
+      </div>
+    </div>
+
+    <div class="ticket-description">
+      <h3>Description</h3>
+      <p>{{ ticket.description }}</p>
+    </div>
+
+    <!-- Actions disponibles selon le statut -->
+    <div class="ticket-actions">
+      <!-- Si non assigné et en attente -->
+      <button 
+        *ngIf="ticket.statut === 'EN_ATTENTE' && (!ticket.intervenant || ticket.intervenant.id !== currentUser?.id)"
+        class="action-btn take-ticket" 
+        (click)="takeTicket()">
+        <i class="material-icons">assignment_ind</i>
+        Prendre en charge
+      </button>
+
+      <!-- Si déjà assigné à l'intervenant connecté -->
+      <div class="status-actions" *ngIf="ticket.intervenant && ticket.intervenant.id === currentUser?.id">
+        <p>Changer le statut:</p>
+        <div class="status-buttons">
+          <button 
+            *ngIf="ticket.statut === 'EN_COURS'"
+            class="status-btn done" 
+            (click)="updateStatus('TRAITE')">
+            Marquer comme traité
+          </button>
+          <button 
+            *ngIf="ticket.statut === 'TRAITE'"
+            class="status-btn close" 
+            (click)="updateStatus('CLOTURE')">
+            Clôturer le ticket
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pièces jointes -->
+    <div class="attachments" *ngIf="ticket.piecesJointes && ticket.piecesJointes.length > 0">
+      <h3>Pièces jointes</h3>
+      <div class="attachment-list">
+        <div class="attachment-item" *ngFor="let piece of ticket.piecesJointes">
+          <i class="material-icons">attach_file</i>
+          <span>{{ piece.nomFichier }}</span>
+          <a [href]="'http://localhost:8080/uploads/' + piece.cheminFichier" 
+             target="_blank" 
+             class="download-btn">
+            <i class="material-icons">download</i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload de fichier -->
+    <div class="file-upload">
+      <h3>Ajouter une pièce jointe</h3>
+      <div class="upload-form">
+        <input type="file" (change)="onFileSelected($event)" class="file-input">
+        <button 
+          [disabled]="!selectedFile" 
+          class="upload-btn" 
+          (click)="uploadFile()">
+          <i class="material-icons">upload_file</i>
+          Uploader
+        </button>
+      </div>
+      <div *ngIf="uploadProgress > 0" class="progress-bar">
+        <div class="progress" [style.width.%]="uploadProgress"></div>
+        <span>{{ uploadProgress }}%</span>
+      </div>
+    </div>
+
+    <!-- Commentaires -->
+    <div class="comments">
+      <h3>Commentaires</h3>
+      <div class="comment-list" *ngIf="ticket.commentaires && ticket.commentaires.length > 0">
+        <div class="comment-item" *ngFor="let comment of ticket.commentaires">
+          <div class="comment-header">
+            <span class="comment-author">{{ comment.auteur?.nom || 'Utilisateur inconnu' }}</span>
+            <span class="comment-date">{{ formatDate(comment.dateCommentaire) }}</span>
+          </div>
+          <div class="comment-content">
+            {{ comment.contenu }}
+          </div>
+        </div>
+      </div>
+      <div class="no-comments" *ngIf="!ticket.commentaires || ticket.commentaires.length === 0">
+        <p>Aucun commentaire pour le moment.</p>
+      </div>
+
+      <!-- Formulaire de commentaire -->
+      <div class="comment-form">
+        <h4>Répondre</h4>
+        <form [formGroup]="commentForm" (ngSubmit)="submitComment()">
+          <textarea 
+            formControlName="contenu" 
+            placeholder="Votre commentaire..."
+            rows="4"></textarea>
+          <div class="form-actions">
+            <button 
+              type="submit" 
+              [disabled]="commentForm.invalid || loading" 
+              class="btn-submit">
+              Envoyer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 

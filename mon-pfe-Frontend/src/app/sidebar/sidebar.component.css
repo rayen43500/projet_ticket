@@ -1,0 +1,118 @@
+.sidebar {
+  width: 80px;
+  height: 100vh;
+  background: #ffffff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: width 0.5s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  overflow: hidden;
+  border-radius: 0 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pour aligner le bouton Log Out en bas */
+  margin-top: 100px;
+}
+
+.sidebar.expanded {
+  width: 250px;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-icon {
+  font-size: 2.5rem; /* Taille de l'icône de profil agrandie */
+  color: #1e3c72; /* Couleur de l'icône de profil */
+}
+
+.profile-text {
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.sidebar.expanded .profile-text {
+  opacity: 1; /* Afficher le texte lorsque la sidebar est étendue */
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 1rem 0;
+  flex-grow: 1; /* Pour occuper l'espace disponible */
+}
+
+.sidebar-menu li {
+  margin: 0.5rem 0;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.sidebar-menu a:hover {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.sidebar-menu i {
+  margin-right: 1rem;
+  font-size: 1.3rem;
+  color: #1e3c72; /* Couleur des icônes du menu */
+  min-width: 24px;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-menu span {
+  font-size: 1rem;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.sidebar.expanded .sidebar-menu span {
+  opacity: 1; /* Afficher le texte lorsque la sidebar est étendue */
+}
+
+.logout-section {
+  padding: 1.5rem;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.logout-section a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: black; /* Couleur du texte Log Out */
+  text-decoration: none;
+  transition: color 0.5s ease;
+  cursor: pointer;
+}
+
+.logout-section a:hover {
+  color: #2a5298; /* Couleur au survol */
+}
+
+.logout-section i {
+  font-size: 1.5rem;
+  color: #1e3c72; /* Couleur de l'icône Log Out */
+}
+

@@ -1,0 +1,120 @@
+<div class="statistics-container">
+  <h1 class="main-title">Tableau de Bord Statistique</h1>
+  
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Chargement des statistiques...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+  
+  <div *ngIf="!loading && !error" class="dashboard-content">
+    <!-- Statistiques globales -->
+    <div class="stats-card global-stats">
+      <h2>Statistiques globales</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value">{{ globalStats.total }}</div>
+          <div class="stat-label">Total des tickets</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ globalStats.enAttente }}</div>
+          <div class="stat-label">En attente</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ globalStats.enCours }}</div>
+          <div class="stat-label">En cours</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ globalStats.traites }}</div>
+          <div class="stat-label">Traités</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ globalStats.clotures }}</div>
+          <div class="stat-label">Clôturés</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Tickets par projet (barchart) -->
+    <div class="stats-card">
+      <h2>Nombre de tickets par projet</h2>
+      <div class="chart-container">
+        <canvas baseChart
+          [type]="barChartType"
+          [datasets]="projectBarChartData.datasets"
+          [labels]="projectBarChartData.labels"
+          [options]="barChartOptions"
+          [legend]="true">
+        </canvas>
+      </div>
+    </div>
+    
+    <!-- Tickets par urgence (piechart) -->
+    <div class="stats-card">
+      <h2>Distribution par priorité</h2>
+      <div class="chart-container">
+        <canvas baseChart
+          [type]="pieChartType"
+          [datasets]="urgencyPieChartData.datasets"
+          [labels]="urgencyPieChartData.labels"
+          [options]="pieChartOptions"
+          [legend]="true">
+        </canvas>
+      </div>
+    </div>
+    
+    <!-- Pourcentage des tickets par projet (doughnut) -->
+    <div class="stats-card">
+      <h2>Répartition des tickets par projet (%)</h2>
+      <div class="chart-container">
+        <canvas baseChart
+          [type]="doughnutChartType"
+          [datasets]="projectPercentagePieChartData.datasets"
+          [labels]="projectPercentagePieChartData.labels"
+          [options]="pieChartOptions"
+          [legend]="true">
+        </canvas>
+      </div>
+    </div>
+    
+    <!-- Statut par projet (grouped bar chart) -->
+    <div class="stats-card large-card">
+      <h2>Statut des tickets par projet (%)</h2>
+      <div class="chart-container">
+        <canvas baseChart
+          [type]="barChartType"
+          [datasets]="statusByProjectChartData.datasets"
+          [labels]="statusByProjectChartData.labels"
+          [options]="barChartOptions"
+          [legend]="true">
+        </canvas>
+      </div>
+    </div>
+    
+    <!-- Types d'interventions récurrentes -->
+    <div class="stats-card">
+      <h2>Types d'interventions récurrentes</h2>
+      <div class="recurring-interventions">
+        <table>
+          <thead>
+            <tr>
+              <th>Type</th>
+              <th>Nombre</th>
+              <th>Pourcentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of recurringInterventionsData">
+              <td>{{ item.type }}</td>
+              <td>{{ item.count }}</td>
+              <td>{{ item.percentage | number:'1.1-2' }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div> 

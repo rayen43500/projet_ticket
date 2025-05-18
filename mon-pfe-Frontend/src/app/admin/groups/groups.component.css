@@ -1,0 +1,192 @@
+/* Conteneur principal */
+.container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 30px;
+  font-family: 'Segoe UI', sans-serif;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Titre principal */
+.page-title {
+  font-size: 2.2rem;
+  text-align: center;
+  color: #202020;
+  margin-bottom: 30px;
+}
+
+/* Bouton principal */
+.btn {
+  margin-bottom: 30px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.3s;
+}
+
+.btn-primary {
+  background-color: #14807c;
+  color: #fff;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+.btn-edit {
+  background-color: #ffc107;
+  color: #fff;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+/* Modal de formulaire */
+.form-modal {
+  background: #f8f9fa;
+  border-left: 5px solid #14807c;
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 10px;
+}
+
+.edit-form {
+  border-color: #f0ad4e;
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0 20px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+
+.intervenant-sublist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.intervenant-sublist li {
+  background: #f1f5f9;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.intervenant-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.intervenant-item:hover {
+  background-color: #f1f1f1;
+}
+
+.selected {
+  background-color: #14807c;
+  color: #fff;
+}
+
+.select-checkbox {
+  margin-right: 10px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.group-list-card {
+  background: #f1f5f9;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* Liste des groupes */
+.group-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.group-table th, .group-table td {
+  padding: 14px;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.group-table th {
+  background-color: #14807c;
+  color: white;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+
+.badge {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  margin-right: 5px;
+}
+
+.group-table td button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+    margin-left: 80px; /* Ajout d'une marge gauche pour ne pas être caché par le sidebar */
+  }
+
+  .group-table th, .group-table td {
+    font-size: 0.9rem;
+  }
+
+  .form-modal {
+    width: 100%;
+  }
+
+  .intervenants-list {
+    max-height: 200px;
+  }
+}

@@ -1,0 +1,149 @@
+<div class="register-container">
+  <div class="register-card">
+
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+      <h1>Bienvenue !</h1>
+      <p>
+        Créez votre compte et découvrez une expérience utilisateur optimisée et fluide.
+      </p>
+    </div>
+
+    <!-- Registration Section -->
+    <div class="register-section">
+      <h2>Créer un compte</h2>
+
+      <!-- Registration Form -->
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+        <!-- Full Name Field -->
+        <div class="form-group">
+            <div class="input-icon">
+              <i class="material-icons">person</i>
+              <input
+                type="text"
+                formControlName="fullName"
+                placeholder="Nom complet"
+                [ngClass]="{
+                  'invalid': f['fullName'].touched && f['fullName'].invalid,
+                  'valid': f['fullName'].touched && f['fullName'].valid
+                }"
+              />
+              <span
+                *ngIf="f['fullName'].touched && f['fullName'].invalid"
+                class="required-inside"
+              >*</span>
+            </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+            <div class="input-icon">
+              <i class="material-icons">email</i>
+              <input
+                type="email"
+                formControlName="email"
+                placeholder="Email"
+                [ngClass]="{
+                  'invalid': f['email'].touched && f['email'].invalid,
+                  'valid': f['email'].touched && f['email'].valid
+                }"
+              />
+              <span
+                *ngIf="f['email'].touched && !f['email'].value"
+                class="required-inside"
+              >*</span>
+            </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+            <div class="input-icon">
+              <i class="material-icons"></i>
+              <input
+                id="password"
+                formControlName="password"
+                [type]="showPassword ? 'text' : 'password'"
+                class="form-control"
+                placeholder="Mot de passe"
+                (focus)="isPasswordFocused = true"
+                (blur)="isPasswordFocused = false"
+                [ngClass]="{
+                  'invalid': f['password'].touched && f['password'].invalid,
+                  'valid': f['password'].touched && f['password'].valid
+                }"
+              />
+              <i
+                class="material-icons toggle-password"
+                (click)="togglePasswordVisibility()"
+              >
+                {{ showPassword ? 'visibility' : 'visibility_off' }}
+              </i>
+              <span
+                *ngIf="f['password'].touched && !f['password'].value"
+                class="required-inside"
+              >*</span>
+              
+              <!-- Password Strength Indicator -->
+              <span
+                *ngIf="isPasswordFocused && f['password'].value && passwordStrengthLevel !== 'empty'"
+                class="strength-indicator"
+                [ngClass]="{
+                  'weak-password': passwordStrengthLevel === 'weak',
+                  'medium-password': passwordStrengthLevel === 'medium',
+                  'strong-password': passwordStrengthLevel === 'strong'
+                }"
+              >
+                {{ passwordStrengthMessage }}
+              </span>
+            </div>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="form-group">
+            <div class="input-icon">
+              <i class="material-icons"></i>
+              <input
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                formControlName="confirmPassword"
+                placeholder="Confirmer mot de passe"
+                [ngClass]="{
+                  'invalid': f['confirmPassword'].touched && 
+                             (f['confirmPassword'].invalid || registerForm.errors?.['passwordsMismatch']),
+                  'valid': f['confirmPassword'].touched && 
+                           f['confirmPassword'].valid && 
+                           !registerForm.errors?.['passwordsMismatch']
+                }"
+              />
+              <i
+                class="material-icons toggle-password"
+                (click)="toggleConfirmPasswordVisibility()"
+              >
+                {{ showConfirmPassword ? 'visibility' : 'visibility_off' }}
+              </i>
+              <span
+                *ngIf="f['confirmPassword'].touched && !f['confirmPassword'].value"
+                class="required-inside"
+              >*</span>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="register-button"
+          [disabled]="!canSubmit()"
+        >
+          S'inscrire
+        </button>
+
+      </form>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        Vous avez déjà un compte ? <a routerLink="/login">Se connecter</a>
+      </div>
+    </div>
+
+  </div>
+</div>

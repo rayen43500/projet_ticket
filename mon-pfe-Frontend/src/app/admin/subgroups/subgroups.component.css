@@ -1,0 +1,75 @@
+/* Gestion des sous-groupes */
+h3.page-title {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.form-modal {
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Liste des sous-groupes */
+.group-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.group-table th, .group-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.group-table th {
+  background-color: #14807c;
+  color: #fff;
+}
+
+.badge {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;
+  margin-right: 5px;
+}
+
+.group-table td button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+    margin-left: 80px; /* Ajout d'une marge gauche pour ne pas être caché par le sidebar */
+  }
+
+  .group-table th, .group-table td {
+    font-size: 0.9rem;
+  }
+
+  .form-modal {
+    width: 100%;
+  }
+
+  .intervenants-list {
+    max-height: 200px;
+  }
+}

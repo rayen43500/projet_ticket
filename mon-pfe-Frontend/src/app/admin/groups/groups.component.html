@@ -1,0 +1,78 @@
+<div class="container">
+  <h2 class="page-title">Gestion des Groupes</h2>
+
+  <!-- Bouton d'ajout de groupe -->
+  <button class="btn btn-primary" (click)="openAddForm()">Ajouter Groupe</button>
+
+  <!-- Formulaire d'ajout de groupe -->
+  <div *ngIf="showAddForm" class="form-modal">
+    <h3>Nouveau Groupe</h3>
+    <input [(ngModel)]="newGroup.nom" placeholder="Nom du groupe" class="input-field" />
+
+    <h4>Sélectionner les intervenants:</h4>
+    <div class="intervenants-list">
+      <div *ngFor="let user of unassignedIntervenants" class="intervenant-item" [class.selected]="isSelected(user)" (click)="toggleIntervenantSelection(user)">
+        <input type="checkbox" [checked]="isSelected(user)" class="select-checkbox" (change)="toggleIntervenantSelection(user)" />
+        <span>{{ user.nom }} ({{ user.email }})</span>
+      </div>
+      <div *ngIf="unassignedIntervenants.length === 0" class="no-intervenants">
+        Aucun intervenant disponible - Tous les intervenants sont déjà assignés à des groupes
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-success" (click)="submitAddForm()">Créer</button>
+      <button class="btn btn-secondary" (click)="showAddForm = false">Annuler</button>
+    </div>
+  </div>
+
+  <!-- Formulaire de modification de groupe -->
+  <div *ngIf="showEditForm" class="form-modal">
+    <h3>Modifier Groupe</h3>
+    <input [(ngModel)]="selectedGroup.nom" placeholder="Nom du groupe" class="input-field" />
+
+    <h4>Sélectionner les intervenants:</h4>
+    <div class="intervenants-list">
+      <div *ngFor="let user of intervenants" class="intervenant-item" [class.selected]="isSelected(user, true)" (click)="toggleIntervenantSelection(user, true)">
+        <input type="checkbox" [checked]="isSelected(user, true)" class="select-checkbox" (change)="toggleIntervenantSelection(user, true)" />
+        <span>{{ user.nom }} ({{ user.email }})</span>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-success" (click)="submitEditForm()">Enregistrer</button>
+      <button class="btn btn-secondary" (click)="showEditForm = false">Annuler</button>
+    </div>
+  </div>
+
+  <!-- Liste des groupes -->
+  <table class="group-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Intervenants</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let group of groupes">
+        <td>{{ group.id }}</td>
+        <td>{{ group.nom }}</td>
+        <td>
+          <ul class="intervenant-sublist">
+            <li *ngFor="let user of group.intervenants">
+              <strong>{{ user.nom }}</strong><br />
+              <small>{{ user.email }}</small>
+            </li>
+          </ul>
+        </td>
+  
+        <td>
+          <button class="btn btn-edit" (click)="openEditForm(group)">✏️</button>
+          <button class="btn btn-delete" (click)="deleteGroup(group.id!)">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> 

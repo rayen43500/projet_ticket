@@ -1,0 +1,123 @@
+.users-container {
+  font-family: 'Segoe UI', sans-serif;
+  margin-left: 100px;
+  transition: margin 0.3s ease;
+  margin-bottom: 200px;
+
+  @media (max-width: 768px) {
+    margin-left: 100px;
+    padding: 15px;
+  }
+}
+
+.search-input {
+  max-width: 600px;
+}
+
+.role-select {
+  max-width: 550px;
+}
+
+.add-btn {
+  white-space: nowrap;
+}
+.table {
+  th {
+    background-color: #f8f9fa;
+    padding: 1rem;
+  }
+
+  td {
+    vertical-align: middle;
+    padding: 0.75rem;
+  }
+
+  .badge {
+    font-size: 0.85em;
+    padding: 0.5em 0.75em;
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  backdrop-filter: blur(2px);
+}
+
+.modal-box {
+  background: white;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 500px;
+  animation: modalSlideIn 0.3s ease-out;
+
+  .modal-header {
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.25rem;
+  }
+
+  .modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+  }
+
+  .modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1.25rem;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    transform: translateY(-20%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 576px) {
+  .btn {
+    width: 100%;
+    padding: 0.75rem;
+  }
+
+  .table {
+    font-size: 14px;
+
+    th, td {
+      padding: 0.5rem;
+    }
+
+    .badge {
+      font-size: 12px;
+    }
+  }
+
+  .modal-box {
+    margin: 10px;
+    
+    .form-label {
+      font-size: 14px;
+    }
+  }
+  .role-select {
+    max-width: 650px;
+  }
+}   
+
+

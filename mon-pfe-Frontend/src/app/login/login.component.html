@@ -1,0 +1,84 @@
+<div class="login-container">
+  <div class="login-card">
+    <!-- message de bienvenue -->
+    <div class="welcome-section">
+      <h1>Bienvenue !</h1>
+      <p>
+        Connectez-vous pour accéder à votre espace personnel et gérer vos interventions.
+      </p>
+    </div>
+
+    <!-- formulaire de connexion -->
+    <div class="login-section">
+      <h2 class="login-title">Se connecter</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" autocomplete="off">
+        <!-- Email -->
+        <div class="form-group">
+          <div class="input-icon">
+            <i class="material-icons">email</i>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="Email"
+              [ngClass]="{
+                'invalid': f['email'].touched && f['email'].invalid,
+                'valid': f['email'].touched && f['email'].valid
+              }"
+            />
+            <span
+              *ngIf="f['email'].touched && !f['email'].value"
+              class="required-inside"
+              >*</span>
+          </div>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="form-group">
+          <div class="input-icon">
+            <i class="material-icons"></i>
+            <input
+              id="password"
+              formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control"
+              placeholder="Mot de passe"
+              (focus)="isPasswordFocused = true"
+              (blur)="isPasswordFocused = false"
+              [ngClass]="{
+                'invalid': f['password'].touched && f['password'].invalid,
+                'valid': f['password'].touched && f['password'].valid
+              }"
+            />
+            <i
+              class="material-icons toggle-password"
+              (click)="togglePasswordVisibility()"
+            >
+              {{ showPassword ? 'visibility' : 'visibility_off' }}
+            </i>
+            <span
+              *ngIf="f['password'].touched && !f['password'].value"
+              class="required-inside"
+              >*</span>
+          </div>
+        </div>
+
+        <!-- Messages d'erreur -->
+         <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Bouton de connexion -->
+        <button type="submit" class="login-button" [disabled]="loginForm.invalid">
+          Se connecter
+        </button>
+
+
+        <!-- Lien d'inscription -->
+        <div class="register-link">
+          Vous n’avez pas de compte ?
+          <a routerLink="/register">S'inscrire</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

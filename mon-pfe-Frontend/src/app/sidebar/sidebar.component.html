@@ -1,0 +1,85 @@
+<div *ngIf="isLogged" class="sidebar" [ngClass]="{ 'expanded': isExpanded }" (mouseenter)="expandSidebar()" (mouseleave)="collapseSidebar()">
+  <!-- Section du profil -->
+  <div class="sidebar-header">
+    <div class="profile-section">
+      <i class="material-icons profile-icon">account_circle</i> <!-- Icône de profil -->
+      <span class="profile-text">{{ user?.nom }}</span>
+    </div>
+  </div>
+
+  <!-- Menu -->
+  <ul class="sidebar-menu">
+    <li>
+      <a [routerLink]="getDashboardLink()" routerLinkActive="active">
+        <i class="material-icons">home</i>
+        <span>Tableau de bord</span>
+      </a>
+    </li>
+
+    <!-- Admin uniquement -->
+    <li *ngIf="user?.role === 'ADMIN'">
+      <a routerLink="/admin/users" routerLinkActive="active">
+        <i class="material-icons">supervisor_account</i>
+        <span>Gestion des utilisateurs</span>
+      </a>
+    </li>
+    <li *ngIf="user?.role === 'ADMIN'">
+      <a routerLink="/admin/groups" routerLinkActive="active">
+        <i class="material-icons">group</i>
+        <span>Gestion des groupes</span>
+      </a>
+    </li>
+    <li *ngIf="user?.role === 'ADMIN'">
+      <a routerLink="/admin/subgroups" routerLinkActive="active">
+        <i class="material-icons">folder</i>
+        <span>Gestion des sous-groupes</span>
+      </a>
+    </li>
+
+    <!-- Intervenant uniquement -->
+    <li *ngIf="user?.role === 'INTERVENANT' || user">
+      <a routerLink="/intervenant/tickets-to-handle" routerLinkActive="active">
+        <i class="material-icons">build</i>
+        <span>Tickets</span>
+      </a>
+    </li>
+
+    <!-- Utilisateur uniquement -->
+    <li *ngIf="user?.role === 'UTILISATEUR'">
+      <a routerLink="/user/create-ticket" routerLinkActive="active">
+        <i class="material-icons">add</i>
+        <span>Créer un ticket</span>
+      </a>
+    </li>
+    <li *ngIf="user?.role === 'UTILISATEUR'">
+      <a routerLink="/user/my-tickets" routerLinkActive="active">
+        <i class="material-icons">list_alt</i>
+        <span>Mes tickets</span>
+      </a>
+    </li>
+
+    <!-- Option Recherche des tickets - visible pour tous les utilisateurs -->
+    <li *ngIf="user?.role === 'UTILISATEUR' || user?.role === 'INTERVENANT'">
+      <a routerLink="/search-tickets" routerLinkActive="active">
+        <i class="material-icons">search</i>
+        <span>Rechercher des tickets</span>
+      </a>
+    </li>
+
+    <!-- Ajouter un lien pour les statistiques dans la section appropriée -->
+    <li *ngIf="user?.role === 'ADMIN' || user?.role === 'INTERVENANT'">
+      <a routerLink="/statistics/dashboard" routerLinkActive="active">
+        <i class="material-icons">insert_chart</i>
+        <span>Statistiques</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Bouton Déconnexion -->
+  <div class="logout-section">
+    <a (click)="logout()" class="logout-link">
+      <i class="material-icons">logout</i>
+      <span *ngIf="isExpanded">Se déconnecter</span> <!-- Texte visible seulement si la sidebar est étendue -->
+    </a>
+  </div>
+</div>

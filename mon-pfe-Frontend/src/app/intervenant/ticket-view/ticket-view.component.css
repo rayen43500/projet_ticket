@@ -1,0 +1,481 @@
+.ticket-view-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 120px);
+}
+
+.action-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #e9ecef;
+  border: none;
+  border-radius: 4px;
+  margin-right: 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #495057;
+  transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+  background-color: #dee2e6;
+}
+
+.back-btn i {
+  margin-right: 6px;
+}
+
+/* Loader */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Messages d'erreur */
+.error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+/* Détails du ticket */
+.ticket-details {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.ticket-header {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ticket-title {
+  flex: 1 1 500px;
+}
+
+.ticket-title h2 {
+  margin: 0 0 10px 0;
+  font-size: 24px;
+  color: #343a40;
+}
+
+.ticket-meta {
+  display: flex;
+  gap: 16px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.ticket-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.status-badge,
+.urgency-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-waiting {
+  background-color: #e2f3fc;
+  color: #0c7cd5;
+}
+
+.status-progress {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-done {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-closed {
+  background-color: #eee;
+  color: #495057;
+}
+
+.urgency-low {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.urgency-medium {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.urgency-high {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.ticket-description {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.ticket-description h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #343a40;
+  margin-bottom: 12px;
+}
+
+.ticket-description p {
+  margin: 0;
+  line-height: 1.6;
+  color: #495057;
+  white-space: pre-line;
+}
+
+/* Actions */
+.ticket-actions {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.action-btn.take-ticket {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-btn.take-ticket:hover {
+  background-color: #0069d9;
+}
+
+.action-btn.take-ticket i {
+  margin-right: 8px;
+}
+
+.status-actions {
+  margin-top: 16px;
+}
+
+.status-actions p {
+  margin-bottom: 8px;
+  color: #495057;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.status-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: filter 0.2s;
+}
+
+.status-btn:hover {
+  filter: brightness(90%);
+}
+
+.status-btn.done {
+  background-color: #28a745;
+  color: white;
+}
+
+.status-btn.close {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* Pièces jointes */
+.attachments {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.attachments h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #343a40;
+  margin-bottom: 16px;
+}
+
+.attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.attachment-item i {
+  margin-right: 8px;
+  color: #6c757d;
+}
+
+.attachment-item span {
+  flex: 1;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: #e9ecef;
+  color: #495057;
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+  background-color: #dee2e6;
+}
+
+/* Upload de fichier */
+.file-upload {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.file-upload h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #343a40;
+  margin-bottom: 16px;
+}
+
+.upload-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.file-input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.upload-btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.upload-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.upload-btn:not(:disabled):hover {
+  background-color: #0069d9;
+}
+
+.upload-btn i {
+  margin-right: 8px;
+}
+
+.progress-bar {
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background-color: #007bff;
+  transition: width 0.3s;
+}
+
+.progress-bar span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #495057;
+  font-size: 12px;
+}
+
+/* Commentaires */
+.comments {
+  padding: 20px;
+}
+
+.comments h3 {
+  margin-top: 0;
+  font-size: 18px;
+  color: #343a40;
+  margin-bottom: 16px;
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.comment-item {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comment-author {
+  font-weight: 500;
+  color: #495057;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.comment-content {
+  color: #212529;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.no-comments {
+  text-align: center;
+  padding: 16px;
+  color: #6c757d;
+  font-style: italic;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.comment-form {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.comment-form h4 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: #343a40;
+}
+
+.comment-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-submit {
+  padding: 8px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-submit:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.btn-submit:not(:disabled):hover {
+  background-color: #0069d9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ticket-header {
+    flex-direction: column;
+  }
+
+  .ticket-badges {
+    align-self: flex-start;
+  }
+
+  .upload-form {
+    flex-direction: column;
+  }
+} 

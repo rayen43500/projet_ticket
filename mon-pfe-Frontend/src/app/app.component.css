@@ -1,0 +1,67 @@
+/* Main Application Container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f5f7fb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Dashboard Layout (sidebar + content) */
+.dashboard-layout {
+  display: flex;
+  flex: 1;
+  position: relative;
+  padding-left: 150px;
+}
+
+/* Main Content Area */
+.content-area {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  max-width: calc(100vw - 80px); /* Account for collapsed sidebar width */
+  transition: max-width 0.3s ease;
+  margin-left: 80px; /* Default collapsed sidebar width */
+}
+
+/* Adjust content area when sidebar is expanded */
+.sidebar.expanded ~ .content-area {
+  max-width: calc(100vw - 250px); /* Account for expanded sidebar width */
+  margin-left: 250px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .content-area {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 15px;
+  }
+  
+  .sidebar {
+    position: fixed;
+    z-index: 1000;
+  }
+  
+  .sidebar.expanded ~ .content-area {
+    margin-left: 0;
+    max-width: 100%;
+  }
+}
+
+/* General styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Smooth transitions */
+.content-area,
+.sidebar {
+  transition: all 0.3s ease;
+}

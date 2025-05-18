@@ -1,0 +1,128 @@
+<div class="tickets-to-handle-container">
+  <div class="page-header">
+    <h1>Tickets à traiter</h1>
+    <p>Gérez et suivez tous vos tickets assignés</p>
+  </div>
+
+  <!-- Loader et message d'erreur -->
+  <div class="loader-container" *ngIf="loading">
+    <div class="loader"></div>
+    <p>Chargement des tickets...</p>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Filtres et recherche -->
+  <div class="filters-container" *ngIf="!loading && !error">
+    <div class="search-bar">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Rechercher un ticket..." 
+        (keyup.enter)="onSearch()"
+      >
+      <button class="search-btn" (click)="onSearch()">
+        <i class="material-icons">search</i>
+      </button>
+    </div>
+
+    <div class="status-filters">
+      <button 
+        [ngClass]="{'active': activeFilter === 'all'}" 
+        (click)="setStatusFilter('all')"
+      >
+        Tous ({{ tickets.length }})
+      </button>
+      <button 
+        [ngClass]="{'active': activeFilter === 'pending'}" 
+        (click)="setStatusFilter('pending')"
+      >
+        En attente ({{ ticketsEnAttente.length }})
+      </button>
+      <button 
+        [ngClass]="{'active': activeFilter === 'inProgress'}" 
+        (click)="setStatusFilter('inProgress')"
+      >
+        En cours ({{ ticketsEnCours.length }})
+      </button>
+      <button 
+        [ngClass]="{'active': activeFilter === 'done'}" 
+        (click)="setStatusFilter('done')"
+      >
+        Traités ({{ ticketsTraites.length }})
+      </button>
+      <button 
+        [ngClass]="{'active': activeFilter === 'closed'}" 
+        (click)="setStatusFilter('closed')"
+      >
+        Clôturés ({{ ticketsClotures.length }})
+      </button>
+    </div>
+  </div>
+
+  <!-- Tableau de tickets -->
+  <div class="tickets-table-container" *ngIf="!loading && !error">
+    <table class="tickets-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Sujet</th>
+          <th>Créateur</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th>Urgence</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of filteredTickets">
+          <td class="ticket-id">#{{ ticket.id }}</td>
+          <td class="ticket-subject">{{ ticket.sujet }}</td>
+          <td>{{ ticket.createur?.nom || 'N/A' }}</td>
+          <td>{{ ticket.dateCreation | date:'dd/MM/yyyy' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(ticket.statut)">
+              {{ ticket.statut }}
+            </span>
+          </td>
+          <td>
+            <span class="urgency-badge" [ngClass]="getUrgencyClass(ticket.urgence)">
+              {{ ticket.urgence }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button class="action-btn view" (click)="viewTicketDetails(ticket.id!)">
+              <i class="material-icons">visibility</i>
+            </button>
+            
+            <ng-container *ngIf="ticket.statut === 'EN_ATTENTE'">
+              <button class="action-btn take" (click)="takeTicket(ticket)">
+                <i class="material-icons">assignment_ind</i>
+              </button>
+            </ng-container>
+            
+            <ng-container *ngIf="ticket.statut === 'EN_COURS'">
+              <button class="action-btn done" (click)="updateTicketStatus(ticket, 'TRAITE')">
+                <i class="material-icons">check_circle</i>
+              </button>
+            </ng-container>
+            
+            <ng-container *ngIf="ticket.statut === 'TRAITE'">
+              <button class="action-btn close" (click)="updateTicketStatus(ticket, 'CLOTURE')">
+                <i class="material-icons">archive</i>
+              </button>
+            </ng-container>
+          </td>
+        </tr>
+        
+        <tr *ngIf="filteredTickets.length === 0">
+          <td colspan="7" class="no-tickets">
+            <p>Aucun ticket trouvé</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

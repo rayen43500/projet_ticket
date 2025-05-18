@@ -1,0 +1,141 @@
+<div class="dashboard-container">
+  <div class="sidebar">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Logo" />
+      <h3>Helpdesk</h3>
+    </div>
+    <nav class="menu">
+      <a routerLink="/user/dashboard" routerLinkActive="active">
+        <i class="material-icons">dashboard</i>
+        <span>Tableau de bord</span>
+      </a>
+      <a routerLink="/user/my-tickets" routerLinkActive="active">
+        <i class="material-icons">list</i>
+        <span>Mes tickets</span>
+      </a>
+      <a routerLink="/user/create-ticket" routerLinkActive="active">
+        <i class="material-icons">add_circle</i>
+        <span>Créer un ticket</span>
+      </a>
+      <a routerLink="/user/profile" routerLinkActive="active">
+        <i class="material-icons">person</i>
+        <span>Mon profil</span>
+      </a>
+    </nav>
+    <div class="logout">
+      <a (click)="logout()">
+        <i class="material-icons">exit_to_app</i>
+        <span>Déconnexion</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <header>
+      <div class="search-bar">
+        <i class="material-icons">search</i>
+        <input type="text" placeholder="Rechercher..." />
+      </div>
+      <div class="user-info">
+        <div class="notifications">
+          <i class="material-icons">notifications</i>
+          <span class="badge">3</span>
+        </div>
+        <div class="user">
+          <img src="assets/images/user-avatar.png" alt="Avatar" />
+          <span>{{ userName }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="dashboard-content">
+      <h1>Tableau de bord</h1>
+      
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="material-icons">pending_actions</i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ pendingTickets }}</h3>
+            <p>Tickets en attente</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="material-icons">hourglass_top</i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ inProgressTickets }}</h3>
+            <p>Tickets en cours</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="material-icons">check_circle</i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ resolvedTickets }}</h3>
+            <p>Tickets résolus</p>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="material-icons">all_inbox</i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ totalTickets }}</h3>
+            <p>Total des tickets</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="recent-tickets">
+        <div class="section-header">
+          <h2>Tickets récents</h2>
+          <a routerLink="/user/my-tickets">Voir tous</a>
+        </div>
+        
+        <div class="tickets-table">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Sujet</th>
+                <th>Statut</th>
+                <th>Date de création</th>
+                <th>Priorité</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ticket of recentTickets">
+                <td>#{{ ticket.id }}</td>
+                <td>{{ ticket.sujet }}</td>
+                <td>
+                  <span class="status" [ngClass]="getStatusClass(ticket.statut)">
+                    {{ ticket.statut }}
+                  </span>
+                </td>
+                <td>{{ ticket.dateCreation | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="priority" [ngClass]="getPriorityClass(ticket.urgence)">
+                    {{ ticket.urgence }}
+                  </span>
+                </td>
+                <td>
+                  <button class="action-btn" [routerLink]="['/user/ticket', ticket.id]">
+                    <i class="material-icons">visibility</i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
