@@ -88,9 +88,9 @@
                   [(ngModel)]="ticket.type"
                   required
                 >
-                  <option value="incident">Incident</option>
-                  <option value="request">Demande</option>
-                  <option value="assistance">Assistance</option>
+                  <option value="INCIDENT">Incident</option>
+                  <option value="DEMANDE">Demande</option>
+                  <option value="ASSISTANCE">Assistance</option>
                 </select>
               </div>
             </div>
@@ -103,7 +103,7 @@
                 <select
                   id="group"
                   name="group"
-                  [(ngModel)]="ticket.groupeNom"
+                  [(ngModel)]="ticket.groupe!.nom"
                   required
                 >
                   <option value="Finance">Finance</option>
@@ -120,7 +120,7 @@
                 <select
                   id="subgroup"
                   name="subgroup"
-                  [(ngModel)]="ticket.sousGroupeNom"
+                  [(ngModel)]="ticket.sousGroupe!.nom"
                   required
                 >
                   <option value="Comptabilité">Comptabilité</option>

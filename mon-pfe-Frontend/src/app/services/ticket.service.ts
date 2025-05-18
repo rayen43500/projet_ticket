@@ -169,4 +169,9 @@ export class TicketService {
   searchTickets(criteria: any): Observable<Ticket[]> {
     return this.http.post<Ticket[]>(`${this.baseUrl}/search`, criteria);
   }
+
+  // Récupérer les tickets d'un utilisateur
+  getUserTickets(userId: number): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(`${this.baseUrl}/user/${userId}`);
+  }
 } 

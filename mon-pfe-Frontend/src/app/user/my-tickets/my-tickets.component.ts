@@ -1,28 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
-
-// Interface pour définir la structure d'un ticket
-interface Ticket {
-  id: number;
-  sujet: string;
-  description: string;
-  dateCreation: Date;
-  statut: string;
-  type: string;
-  urgence: string;
-  createurId: number;
-  createurNom: string;
-  intervenantId?: number;
-  intervenantNom?: string;
-  groupeId: number;
-  groupeNom: string;
-  sousGroupeId?: number;
-  sousGroupeNom?: string;
-  commentaires?: any[];
-  piecesJointes?: any[];
-}
+import { TicketService } from '../../services/ticket.service';
+import { Ticket } from '../../models/ticket.model';
+import { AuthService, Utilisateur } from '../../services/auth.service';
 
 @Component({
   selector: 'app-my-tickets',
@@ -39,34 +19,53 @@ export class MyTicketsComponent implements OnInit {
   statusFilter = 'all';
   ticket: Partial<Ticket> = this.getEmptyTicket();
   attachments: File[] = [];
+  currentUser: Utilisateur | null = null;
   
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private ticketService: TicketService, 
+    private router: Router,
+    private authService: AuthService
+  ) {
+    // Ensure ticket has groupe and sousGroupe initialized
+    this.ticket = this.getEmptyTicket();
+    // Get current user
+    this.currentUser = this.authService.getSessionUser();
+  }
 
   ngOnInit(): void {
-    this.loadTickets();
+    // Subscribe to user changes
+    this.authService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
+      if (user) {
+        this.loadTickets();
+      }
+    });
+    
+    // If already authenticated, load tickets
+    if (this.currentUser?.id) {
+      this.loadTickets();
+    }
   }
 
   loadTickets(): void {
     this.loading = true;
     this.error = '';
     
-    // Récupérer l'utilisateur connecté
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (!currentUser || !currentUser.id) {
+    if (!this.currentUser || !this.currentUser.id) {
       this.error = 'Utilisateur non connecté';
       this.loading = false;
       return;
     }
 
-    // Appel à l'API pour récupérer les tickets de l'utilisateur
-    this.http.get<Ticket[]>(`${environment.apiUrl}/tickets/user/${currentUser.id}`)
+    // Utiliser le service pour récupérer les tickets de l'utilisateur
+    this.ticketService.getUserTickets(this.currentUser.id)
       .subscribe(
-        (data) => {
+        (data: Ticket[]) => {
           this.tickets = data;
           this.applyFilters();
           this.loading = false;
         },
-        (error) => {
+        (error: any) => {
           console.error('Erreur lors du chargement des tickets', error);
           this.error = 'Impossible de charger les tickets. Veuillez réessayer.';
           this.loading = false;
@@ -93,7 +92,7 @@ export class MyTicketsComponent implements OnInit {
     
     // Trier par date (plus récent en premier)
     filtered.sort((a, b) => 
-      new Date(b.dateCreation).getTime() - new Date(a.dateCreation).getTime()
+      new Date(b.dateCreation!).getTime() - new Date(a.dateCreation!).getTime()
     );
     
     this.filteredTickets = filtered;
@@ -114,12 +113,12 @@ export class MyTicketsComponent implements OnInit {
       this.selectedTicket = null;
     } else {
       // Charger les détails complets du ticket
-      this.http.get<Ticket>(`${environment.apiUrl}/tickets/${ticket.id}`)
+      this.ticketService.getTicketById(ticket.id!)
         .subscribe(
-          (data) => {
+          (data: Ticket) => {
             this.selectedTicket = data;
           },
-          (error) => {
+          (error: any) => {
             console.error('Erreur lors du chargement des détails du ticket', error);
           }
         );
@@ -158,31 +157,31 @@ export class MyTicketsComponent implements OnInit {
       return;
     }
 
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (!currentUser || !currentUser.id) {
+    if (!this.currentUser || !this.currentUser.id) {
       console.error('Utilisateur non connecté');
       return;
     }
 
-    const commentData = new FormData();
-    commentData.append('auteurId', currentUser.id.toString());
-    commentData.append('contenu', comment);
+    const commentData = {
+      auteurId: this.currentUser.id,
+      contenu: comment
+    };
 
-    this.http.post(`${environment.apiUrl}/tickets/${ticketId}/comments`, commentData)
+    this.ticketService.addComment(ticketId, commentData)
       .subscribe(
         () => {
           // Recharger les détails du ticket pour afficher le nouveau commentaire
-          this.http.get<Ticket>(`${environment.apiUrl}/tickets/${ticketId}`)
+          this.ticketService.getTicketById(ticketId)
             .subscribe(
-              (data) => {
+              (data: Ticket) => {
                 this.selectedTicket = data;
               },
-              (error) => {
+              (error: any) => {
                 console.error('Erreur lors du rechargement des détails du ticket', error);
               }
             );
         },
-        (error) => {
+        (error: any) => {
           console.error('Erreur lors de l\'ajout du commentaire', error);
         }
       );
@@ -192,10 +191,16 @@ export class MyTicketsComponent implements OnInit {
     return {
       sujet: '',
       description: '',
-      urgence: 'FAIBLE',
-      type: 'incident',
-      groupeNom: '',
-      sousGroupeNom: '',
+      urgence: 'FAIBLE' as 'FAIBLE',
+      type: 'INCIDENT' as 'INCIDENT',
+      groupe: {
+        id: 0,
+        nom: ''
+      },
+      sousGroupe: {
+        id: 0,
+        nom: ''
+      }
     };
   }
 
@@ -206,34 +211,78 @@ export class MyTicketsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (!this.ticket.sujet || !this.ticket.description || !this.ticket.urgence || !this.ticket.type || !this.ticket.groupeNom || !this.ticket.sousGroupeNom) {
-      this.error = 'Veuillez remplir tous les champs.';
+    // Ensure ticket has required groupe and sousGroupe objects
+    this.ensureTicketHasGroupObjects();
+    
+    if (!this.ticket.sujet || !this.ticket.description || !this.ticket.urgence || !this.ticket.type || 
+        !this.ticket.groupe?.nom || !this.ticket.sousGroupe?.nom) {
+      this.error = 'Veuillez remplir tous les champs obligatoires.';
       return;
     }
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (!currentUser || !currentUser.id) {
+    
+    if (!this.currentUser || !this.currentUser.id) {
       this.error = 'Utilisateur non connecté';
       return;
     }
-    const formData = new FormData();
-    formData.append('sujet', this.ticket.sujet);
-    formData.append('description', this.ticket.description);
-    formData.append('urgence', this.ticket.urgence);
-    formData.append('type', this.ticket.type);
-    formData.append('groupeNom', this.ticket.groupeNom);
-    formData.append('sousGroupeNom', this.ticket.sousGroupeNom);
-    formData.append('createurId', currentUser.id.toString());
-    this.attachments.forEach(file => formData.append('piecesJointes', file));
-    this.http.post(`${environment.apiUrl}/tickets`, formData)
+
+    // Préparer les données du ticket
+    const ticketData = {
+      sujet: this.ticket.sujet,
+      description: this.ticket.description,
+      type: this.ticket.type,
+      urgence: this.ticket.urgence,
+      createurId: this.currentUser.id,
+      groupeId: this.ticket.groupe!.id || this.getGroupIdByName(this.ticket.groupe!.nom),
+      sousGroupeId: this.ticket.sousGroupe!.id || this.getSousGroupIdByName(this.ticket.sousGroupe!.nom)
+    };
+
+    this.ticketService.createTicket(ticketData, this.attachments)
       .subscribe(
         () => {
           this.loadTickets();
           this.closeForm();
         },
-        (error) => {
+        (error: any) => {
           this.error = "Erreur lors de la création du ticket.";
+          console.error('Erreur de création de ticket', error);
         }
       );
+  }
+
+  // Méthode pour garantir que les objets groupe et sousGroupe existent
+  ensureTicketHasGroupObjects(): void {
+    if (!this.ticket.groupe) {
+      this.ticket.groupe = {
+        id: 0,
+        nom: ''
+      };
+    }
+    
+    if (!this.ticket.sousGroupe) {
+      this.ticket.sousGroupe = {
+        id: 0,
+        nom: ''
+      };
+    }
+  }
+
+  // Méthodes d'aide pour convertir les noms en IDs
+  getGroupIdByName(name: string): number {
+    const groupMapping: { [key: string]: number } = {
+      'Finance': 1,
+      'Informatique': 2,
+      'Ressources Humaines': 3
+    };
+    return groupMapping[name] || 0;
+  }
+
+  getSousGroupIdByName(name: string): number {
+    const sousGroupMapping: { [key: string]: number } = {
+      'Comptabilité': 1,
+      'Réseau': 2,
+      'Paie': 3
+    };
+    return sousGroupMapping[name] || 0;
   }
 
   onFileChange(event: Event): void {
