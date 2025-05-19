@@ -106,10 +106,12 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s ease-in-out;
+  margin-bottom: 10px;
 }
 
 .intervenant-item:hover {
   background-color: #f1f1f1;
+  color: black;
 }
 
 .selected {
