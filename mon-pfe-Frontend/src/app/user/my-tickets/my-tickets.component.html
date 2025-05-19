@@ -1,162 +1,212 @@
-<!-- Overlay plein écran pour le formulaire -->
-<div class="form-overlay" *ngIf="selectedTicket">
-  <!-- Bouton pour fermer -->
-  <button class="close-button" (click)="closeForm()">×</button>
-
-  <div class="tickets-container">
-    <h2>Mes Tickets</h2>
-  
-    <!-- Liste des tickets -->
-    <ul class="tickets-list">
-      <li *ngFor="let ticket of tickets" class="ticket-card" (click)="selectTicket(ticket)">
-        <div class="ticket-header">
-          <h3>{{ ticket.sujet }}</h3>
-          <p class="ticket-status">{{ ticket.statut }}</p>
-        </div>
-        <p class="ticket-description">{{ ticket.description }}</p>
-        <div class="ticket-footer">
-          <span class="ticket-priority">Priorité: {{ ticket.urgence }}</span>
-        </div>
-      </li>
-    </ul>
-  
-    <!-- Overlay plein écran pour le formulaire -->
-    <div class="form-overlay" *ngIf="selectedTicket">
-      <!-- Bouton pour fermer -->
-      <button class="close-button" (click)="closeForm()">×</button>
-  
-      <div class="create-ticket-container">
-        <div class="ticket-card">
-          <h1>Créer un Nouveau Ticket</h1>
-          <form (ngSubmit)="onSubmit()" class="ticket-form">
-            <!-- Sujet du ticket -->
-            <div class="form-group">
-              <label for="subject">Sujet</label>
-              <div class="input-icon">
-                <i class="material-icons">title</i>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  placeholder="Entrez le sujet de votre ticket"
-                  [(ngModel)]="ticket.sujet"
-                  required
-                />
-              </div>
-            </div>
-      
-            <!-- Description du ticket -->
-            <div class="form-group">
-              <label for="description">Description</label>
-              <div class="textarea-container">
-                <textarea
-                  id="description"
-                  name="description"
-                  placeholder="Décrivez votre problème ou demande"
-                  [(ngModel)]="ticket.description"
-                  required
-                ></textarea>
-              </div>
-            </div>
-      
-            <!-- Degré d'urgence -->
-            <div class="form-group">
-              <label for="priority">Priorité</label>
-              <div class="input-icon">
-                <i class="material-icons">priority_high</i>
-                <select
-                  id="priority"
-                  name="priority"
-                  [(ngModel)]="ticket.urgence"
-                  required
-                >
-                  <option value="FAIBLE">Faible</option>
-                  <option value="MOYENNE">Moyenne</option>
-                  <option value="HAUTE">Élevée</option>
-                </select>
-              </div>
-            </div>
-      
-            <!-- Type d'intervention -->
-            <div class="form-group">
-              <label for="type">Type d'Intervention</label>
-              <div class="input-icon">
-                <i class="material-icons">category</i>
-                <select
-                  id="type"
-                  name="type"
-                  [(ngModel)]="ticket.type"
-                  required
-                >
-                  <option value="INCIDENT">Incident</option>
-                  <option value="DEMANDE">Demande</option>
-                  <option value="ASSISTANCE">Assistance</option>
-                </select>
-              </div>
-            </div>
-      
-            <!-- Groupe et sous-groupe -->
-            <div class="form-group">
-              <label for="group">Groupe</label>
-              <div class="input-icon">
-                <i class="material-icons">group_work</i>
-                <select
-                  id="group"
-                  name="group"
-                  [(ngModel)]="ticket.groupe!.nom"
-                  required
-                >
-                  <option value="Finance">Finance</option>
-                  <option value="Informatique">Informatique</option>
-                  <option value="Ressources Humaines">Ressources Humaines</option>
-                </select>
-              </div>
-            </div>
-      
-            <div class="form-group">
-              <label for="subgroup">Sous-groupe</label>
-              <div class="input-icon">
-                <i class="material-icons">layers</i>
-                <select
-                  id="subgroup"
-                  name="subgroup"
-                  [(ngModel)]="ticket.sousGroupe!.nom"
-                  required
-                >
-                  <option value="Comptabilité">Comptabilité</option>
-                  <option value="Réseau">Réseau</option>
-                  <option value="Paie">Paie</option>
-                </select>
-              </div>
-            </div>
-      
-            <!-- Pièces jointes -->
-            <div class="form-group">
-              <label for="attachments">Pièces jointes</label>
-              <div class="file-upload">
-                <label for="attachments">
-                  <i class="material-icons">attach_file</i>
-                  <span>Choisir des fichiers</span>
-                  <input
-                    type="file"
-                    id="attachments"
-                    name="attachments"
-                    (change)="onFileChange($event)"
-                    multiple
-                  />
-                </label>
-              </div>
-            </div>
-      
-            <!-- Bouton de soumission -->
-            <button type="submit" class="submit-button">
-              <i class="material-icons">send</i>
-              <span>Créer un Ticket</span>
-            </button>
-          </form>
-        </div>
+<!-- Main container -->
+<div class="my-tickets-container">
+  <div class="header">
+    <h1>Mes Tickets</h1>
+    <div class="header-actions">
+      <div class="search-box">
+        <i class="material-icons">search</i>
+        <input type="text" placeholder="Rechercher un ticket..." (input)="onSearch($event)">
       </div>
-      
-      <app-edit-ticket-form [ticket]="selectedTicket"></app-edit-ticket-form>
+      <div class="filter-box">
+        <label>Statut:</label>
+        <select #statusSelect (change)="onStatusFilterChange(statusSelect.value)">
+          <option value="all">Tous</option>
+          <option value="EN_ATTENTE">En attente</option>
+          <option value="EN_COURS">En cours</option>
+          <option value="TRAITE">Traité</option>
+          <option value="CLOTURE">Clôturé</option>
+        </select>
+      </div>
+      <button class="new-ticket-btn" (click)="selectedTicket = getEmptyTicket()">
+        <i class="material-icons">add</i>
+        Nouveau ticket
+      </button>
     </div>
   </div>
+
+  <!-- Loading state -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <p>Chargement des tickets...</p>
+  </div>
+
+  <!-- Error state -->
+  <div class="error-state" *ngIf="error && !loading">
+    <i class="material-icons">error</i>
+    <p>{{ error }}</p>
+    <button (click)="loadTickets()">Réessayer</button>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="filteredTickets.length === 0 && !loading && !error">
+    <i class="material-icons">inbox</i>
+    <p>Aucun ticket à afficher</p>
+    <button (click)="selectedTicket = getEmptyTicket()">Créer un ticket</button>
+  </div>
+
+  <!-- Tickets list -->
+  <div class="tickets-list" *ngIf="filteredTickets.length > 0 && !loading">
+    <div class="ticket-card" *ngFor="let ticket of filteredTickets" (click)="selectTicket(ticket)">
+      <div class="ticket-header">
+        <h3>{{ ticket.sujet }}</h3>
+        <span class="ticket-status" [ngClass]="getStatusClass(ticket.statut)">{{ ticket.statut }}</span>
+      </div>
+      <p class="ticket-description">{{ ticket.description | slice:0:150 }}{{ ticket.description.length > 150 ? '...' : '' }}</p>
+      <div class="ticket-footer">
+        <div class="ticket-meta">
+          <span class="ticket-date">
+            <i class="material-icons">calendar_today</i>
+            {{ formatDate(ticket.dateCreation) }}
+          </span>
+          <span class="ticket-priority" [ngClass]="getPriorityClass(ticket.urgence)">
+            <i class="material-icons">flag</i>
+            {{ ticket.urgence }}
+          </span>
+        </div>
+        <div class="ticket-actions">
+          <button class="view-btn" [routerLink]="['/user/ticket', ticket.id]">
+            <i class="material-icons">visibility</i>
+            Voir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay pour le formulaire de création de ticket -->
+  <div class="form-overlay" *ngIf="selectedTicket">
+    <div class="create-ticket-container">
+      <div class="ticket-form-header">
+        <h2>Créer un Nouveau Ticket</h2>
+        <button class="close-button" (click)="closeForm()">×</button>
+      </div>
+      
+      <form (ngSubmit)="onSubmit()" class="ticket-form">
+        <!-- Sujet du ticket -->
+        <div class="form-group">
+          <label for="subject">Sujet</label>
+          <div class="input-icon">
+            <i class="material-icons">title</i>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="Entrez le sujet de votre ticket"
+              [(ngModel)]="ticket.sujet"
+              required
+            />
+          </div>
+        </div>
+  
+        <!-- Description du ticket -->
+        <div class="form-group">
+          <label for="description">Description</label>
+          <div class="textarea-container">
+            <textarea
+              id="description"
+              name="description"
+              placeholder="Décrivez votre problème ou demande"
+              [(ngModel)]="ticket.description"
+              required
+            ></textarea>
+          </div>
+        </div>
+  
+        <!-- Degré d'urgence -->
+        <div class="form-group">
+          <label for="priority">Priorité</label>
+          <div class="input-icon">
+            <i class="material-icons">priority_high</i>
+            <select
+              id="priority"
+              name="priority"
+              [(ngModel)]="ticket.urgence"
+              required
+            >
+              <option value="FAIBLE">Faible</option>
+              <option value="MOYENNE">Moyenne</option>
+              <option value="HAUTE">Élevée</option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Type d'intervention -->
+        <div class="form-group">
+          <label for="type">Type d'Intervention</label>
+          <div class="input-icon">
+            <i class="material-icons">category</i>
+            <select
+              id="type"
+              name="type"
+              [(ngModel)]="ticket.type"
+              required
+            >
+              <option value="INCIDENT">Incident</option>
+              <option value="DEMANDE">Demande</option>
+              <option value="ASSISTANCE">Assistance</option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Groupe et sous-groupe -->
+        <div class="form-group">
+          <label for="group">Groupe</label>
+          <div class="input-icon">
+            <i class="material-icons">group_work</i>
+            <select
+              id="group"
+              name="group"
+              [(ngModel)]="ticket.groupe.nom"
+              required
+            >
+              <option value="Finance">Finance</option>
+              <option value="Informatique">Informatique</option>
+              <option value="Ressources Humaines">Ressources Humaines</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="subgroup">Sous-groupe</label>
+          <div class="input-icon">
+            <i class="material-icons">layers</i>
+            <select
+              id="subgroup"
+              name="subgroup"
+              [(ngModel)]="ticket.sousGroupe!.nom"
+              required
+            >
+              <option value="Comptabilité">Comptabilité</option>
+              <option value="Réseau">Réseau</option>
+              <option value="Paie">Paie</option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Pièces jointes -->
+        <div class="form-group">
+          <label for="attachments">Pièces jointes</label>
+          <div class="file-upload">
+            <label for="attachments">
+              <i class="material-icons">attach_file</i>
+              <span>Choisir des fichiers</span>
+              <input
+                type="file"
+                id="attachments"
+                name="attachments"
+                (change)="onFileChange($event)"
+                multiple
+              />
+            </label>
+          </div>
+        </div>
+  
+        <!-- Bouton de soumission -->
+        <button type="submit" class="submit-button">
+          <i class="material-icons">send</i>
+          <span>Créer un Ticket</span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

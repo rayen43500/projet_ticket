@@ -13,7 +13,7 @@
     <div class="error-message" *ngIf="error">
       <i class="material-icons">error</i>
       <p>{{ error }}</p>
-      <button class="retry-button" *ngIf="ticket?.id !== undefined" (click)="loadTicket(ticket!.id)">Réessayer</button>
+      <button class="retry-button" *ngIf="ticket?.id !== undefined" (click)="loadTicket(ticket!.id!)">Réessayer</button>
     </div>
 
     <!-- Indicateur de chargement -->
@@ -38,7 +38,7 @@
         <div class="info-group">
           <div class="info-item">
             <span class="info-label">Créé par</span>
-            <span class="info-value">{{ ticket.createurNom }}</span>
+            <span class="info-value">{{ ticket.createur?.nom || 'N/A' }}</span>
           </div>
           <div class="info-item">
             <span class="info-label">Date de création</span>
@@ -58,12 +58,9 @@
           </div>
           <div class="info-item">
             <span class="info-label">Groupe</span>
-            <span class="info-value">{{ ticket.groupeNom }}</span>
+            <span class="info-value">{{ ticket.groupe?.nom ? ticket.groupe.nom : 'N/A' }}</span>
           </div>
-          <div class="info-item" *ngIf="ticket.sousGroupeNom">
-            <span class="info-label">Sous-groupe</span>
-            <span class="info-value">{{ ticket.sousGroupeNom }}</span>
-          </div>
+                              <div class="info-item" *ngIf="ticket.sousGroupe">            <span class="info-label">Sous-groupe</span>            <span class="info-value">{{ ticket.sousGroupe.nom || 'N/A' }}</span>          </div>
         </div>
       </div>
 
@@ -91,7 +88,7 @@
             <div class="comment-header">
               <div class="comment-author">
                 <img src="assets/images/user-avatar.png" alt="Avatar" />
-                <span>{{ comment.auteurNom }}</span>
+                <span>{{ comment.auteurNom || 'Utilisateur' }}</span>
               </div>
               <span class="comment-date">{{ formatDate(comment.dateCreation) }}</span>
             </div>
@@ -109,10 +106,14 @@
           <h4>Ajouter un commentaire</h4>
           <div class="comment-form">
             <textarea [(ngModel)]="newComment" placeholder="Votre commentaire..."></textarea>
-            <button (click)="addComment()" [disabled]="!newComment.trim()">
+            <button (click)="addComment()" [disabled]="!newComment.trim() || !currentUser">
               <i class="material-icons">send</i>
               Envoyer
             </button>
+          </div>
+          <div class="error-hint" *ngIf="!currentUser">
+            <i class="material-icons">info</i>
+            <span>Vous devez être connecté pour ajouter un commentaire</span>
           </div>
         </div>
       </div>

@@ -1,27 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-
-interface Ticket {
-  id: number;
-  sujet: string;
-  description: string;
-  dateCreation: Date;
-  statut: string;
-  type: string;
-  urgence: string;
-  createurId: number;
-  createurNom: string;
-  intervenantId?: number;
-  intervenantNom?: string;
-  groupeId: number;
-  groupeNom: string;
-  sousGroupeId?: number;
-  sousGroupeNom?: string;
-  commentaires?: any[];
-  piecesJointes?: any[];
-}
+import { TicketService } from '../../services/ticket.service';
+import { AuthService, Utilisateur } from '../../services/auth.service';
+import { Ticket } from '../../models/ticket.model';
 
 @Component({
   selector: 'app-view-ticket',
@@ -33,18 +14,28 @@ export class ViewTicketComponent implements OnInit {
   loading = true;
   error = '';
   newComment = '';
+  currentUser: Utilisateur | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
-    private router: Router
-  ) {}
+    private ticketService: TicketService,
+    private router: Router,
+    private authService: AuthService
+  ) {
+    this.currentUser = this.authService.getSessionUser();
+  }
 
   ngOnInit(): void {
+    // Subscribe to auth changes
+    this.authService.getCurrentUser().subscribe(user => {
+      this.currentUser = user;
+    });
+    
+    // Load ticket based on route param
     this.route.params.subscribe(params => {
       const ticketId = params['id'];
       if (ticketId) {
-        this.loadTicket(ticketId);
+        this.loadTicket(+ticketId);
       }
     });
   }
@@ -53,7 +44,7 @@ export class ViewTicketComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.http.get<Ticket>(`${environment.apiUrl}/tickets/${id}`)
+    this.ticketService.getTicketById(id)
       .subscribe(
         (data) => {
           this.ticket = data;
@@ -86,34 +77,33 @@ export class ViewTicketComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('fr-FR');
-  }
+      formatDate(date: Date | string | undefined): string {    return date ? new Date(date).toLocaleDateString('fr-FR') : '';  }
 
   addComment(): void {
     if (!this.newComment.trim() || !this.ticket) {
       return;
     }
 
-    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-    if (!currentUser || !currentUser.id) {
-      console.error('Utilisateur non connecté');
+    if (!this.currentUser || !this.currentUser.id) {
+      this.error = 'Utilisateur non connecté';
       return;
     }
 
-    const commentData = new FormData();
-    commentData.append('auteurId', currentUser.id.toString());
-    commentData.append('contenu', this.newComment);
+    const commentData = {
+      auteurId: this.currentUser.id,
+      contenu: this.newComment
+    };
 
-    this.http.post(`${environment.apiUrl}/tickets/${this.ticket.id}/comments`, commentData)
+    this.ticketService.addComment(this.ticket.id!, commentData)
       .subscribe(
         () => {
           // Recharger les détails du ticket pour afficher le nouveau commentaire
-          this.loadTicket(this.ticket!.id);
+          this.loadTicket(this.ticket!.id!);
           this.newComment = '';
         },
         (error) => {
           console.error('Erreur lors de l\'ajout du commentaire', error);
+          this.error = 'Erreur lors de l\'ajout du commentaire';
         }
       );
   }

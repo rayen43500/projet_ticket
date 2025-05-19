@@ -28,10 +28,8 @@ export interface Ticket {
     id: number;
     contenu: string;
     dateCreation: Date;
-    auteur: {
-      id: number;
-      nom: string;
-    }
+    auteurNom: string;
+    auteurId: number;
   }>;
   piecesJointes?: Array<{
     id: number;

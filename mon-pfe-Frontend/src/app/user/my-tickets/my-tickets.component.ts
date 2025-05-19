@@ -17,7 +17,7 @@ export class MyTicketsComponent implements OnInit {
   error = '';
   searchTerm = '';
   statusFilter = 'all';
-  ticket: Partial<Ticket> = this.getEmptyTicket();
+  ticket: Ticket = this.getEmptyTicket();
   attachments: File[] = [];
   currentUser: Utilisateur | null = null;
   
@@ -28,6 +28,7 @@ export class MyTicketsComponent implements OnInit {
   ) {
     // Ensure ticket has groupe and sousGroupe initialized
     this.ticket = this.getEmptyTicket();
+    this.ensureTicketHasGroupObjects();
     // Get current user
     this.currentUser = this.authService.getSessionUser();
   }
@@ -148,7 +149,8 @@ export class MyTicketsComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
+  formatDate(date: Date | undefined | string): string {
+    if (!date) return '';
     return new Date(date).toLocaleDateString('fr-FR');
   }
 
@@ -187,12 +189,13 @@ export class MyTicketsComponent implements OnInit {
       );
   }
 
-  getEmptyTicket(): Partial<Ticket> {
+  getEmptyTicket(): Ticket {
     return {
       sujet: '',
       description: '',
-      urgence: 'FAIBLE' as 'FAIBLE',
-      type: 'INCIDENT' as 'INCIDENT',
+      statut: 'EN_ATTENTE',
+      urgence: 'FAIBLE',
+      type: 'INCIDENT',
       groupe: {
         id: 0,
         nom: ''
