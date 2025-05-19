@@ -128,26 +128,21 @@ export class TicketService {
   updateTicket(ticketData: TicketUpdateData): Observable<Ticket> {
     console.log('Mise à jour du ticket:', ticketData);
     
-    const params = new HttpParams()
-      .set('sujet', ticketData.sujet)
-      .set('description', ticketData.description)
-      .set('type', ticketData.type)
-      .set('urgence', ticketData.urgence)
-      .set('groupeId', ticketData.groupeId.toString());
+    const formData = new FormData();
     
-    // Ajouter le sousGroupeId si présent
-    const finalParams = ticketData.sousGroupeId 
-      ? params.set('sousGroupeId', ticketData.sousGroupeId.toString())
-      : params;
+    // Ajouter les données du ticket de manière explicite
+    formData.append('id', ticketData.id.toString());
+    formData.append('sujet', ticketData.sujet);
+    formData.append('description', ticketData.description);
+    formData.append('type', ticketData.type);
+    formData.append('urgence', ticketData.urgence);
+    formData.append('groupeId', ticketData.groupeId.toString());
     
-    const options = {
-      params: finalParams,
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded'
-      })
-    };
+    if (ticketData.sousGroupeId) {
+      formData.append('sousGroupeId', ticketData.sousGroupeId.toString());
+    }
     
-    return this.http.put<Ticket>(`${this.baseUrl}/${ticketData.id}`, null, options);
+    return this.http.put<Ticket>(`${this.baseUrl}/${ticketData.id}`, formData);
   }
 
   // Mettre à jour le statut d'un ticket

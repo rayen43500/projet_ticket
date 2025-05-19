@@ -438,4 +438,34 @@ public class TicketService {
             return null;
         }
     }
+
+    // Mettre à jour les propriétés d'un ticket
+    @Transactional
+    public TicketDTO updateTicket(Long id, String sujet, String description, Ticket.Type type, 
+                               Ticket.Urgence urgence, Long groupeId, Long sousGroupeId) {
+        
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket non trouvé avec l'id " + id));
+        
+        ticket.setSujet(sujet);
+        ticket.setDescription(description);
+        ticket.setType(type);
+        ticket.setUrgence(urgence);
+        
+        // Mettre à jour le groupe
+        Groupe groupe = groupeRepository.findById(groupeId)
+                .orElseThrow(() -> new RuntimeException("Groupe non trouvé avec l'id " + groupeId));
+        ticket.setGroupe(groupe);
+        
+        // Mettre à jour le sous-groupe si présent
+        if (sousGroupeId != null) {
+            SousGroupe sousGroupe = sousGroupeRepository.findById(sousGroupeId)
+                    .orElseThrow(() -> new RuntimeException("Sous-groupe non trouvé avec l'id " + sousGroupeId));
+            ticket.setSousGroupe(sousGroupe);
+        } else {
+            ticket.setSousGroupe(null);
+        }
+        
+        return new TicketDTO(ticketRepository.save(ticket));
+    }
 } 

@@ -94,7 +94,9 @@ export class UpdateTicketComponent implements OnInit {
 
   populateForm(ticket: Ticket): void {
     // Load the subgroups based on the ticket's group
-    if (ticket.groupe?.id) {
+    if (ticket.groupeId) {
+      this.filterSousGroupes(ticket.groupeId);
+    } else if (ticket.groupe?.id) {
       this.filterSousGroupes(ticket.groupe.id);
     }
 
@@ -104,8 +106,8 @@ export class UpdateTicketComponent implements OnInit {
       description: ticket.description,
       type: ticket.type,
       urgence: ticket.urgence,
-      groupeId: ticket.groupe?.id,
-      sousGroupeId: ticket.sousGroupe?.id
+      groupeId: ticket.groupeId || ticket.groupe?.id,
+      sousGroupeId: ticket.sousGroupeId || ticket.sousGroupe?.id
     });
   }
 

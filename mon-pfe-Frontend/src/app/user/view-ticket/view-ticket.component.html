@@ -58,7 +58,7 @@
           </div>
           <div class="info-item">
             <span class="info-label">Groupe</span>
-            <span class="info-value">{{ ticket.groupe?.nom ? ticket.groupe.nom : 'N/A' }}</span>
+            <span class="info-value">{{ ticket.groupeNom || 'N/A' }}</span>
           </div>
                               <div class="info-item" *ngIf="ticket.sousGroupe">            <span class="info-label">Sous-groupe</span>            <span class="info-value">{{ ticket.sousGroupe.nom || 'N/A' }}</span>          </div>
         </div>

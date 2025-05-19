@@ -168,4 +168,21 @@ public class TicketController {
         List<TicketDTO> tickets = ticketService.advancedSearchTickets(searchCriteria);
         return ResponseEntity.ok(tickets);
     }
+
+    // Mettre à jour un ticket
+    @PutMapping("/{id}")
+    public ResponseEntity<TicketDTO> updateTicket(
+            @PathVariable Long id,
+            @RequestParam String sujet,
+            @RequestParam String description,
+            @RequestParam Ticket.Type type,
+            @RequestParam Ticket.Urgence urgence,
+            @RequestParam Long groupeId,
+            @RequestParam(required = false) Long sousGroupeId) {
+
+        TicketDTO updatedTicket = ticketService.updateTicket(
+                id, sujet, description, type, urgence, groupeId, sousGroupeId);
+
+        return ResponseEntity.ok(updatedTicket);
+    }
 } 
