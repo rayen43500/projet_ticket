@@ -17,7 +17,7 @@
           <option value="CLOTURE">Clôturé</option>
         </select>
       </div>
-      <button class="new-ticket-btn" (click)="selectedTicket = getEmptyTicket()">
+      <button class="new-ticket-btn" routerLink="/user/create-ticket">
         <i class="material-icons">add</i>
         Nouveau ticket
       </button>
@@ -41,7 +41,7 @@
   <div class="empty-state" *ngIf="filteredTickets.length === 0 && !loading && !error">
     <i class="material-icons">inbox</i>
     <p>Aucun ticket à afficher</p>
-    <button (click)="selectedTicket = getEmptyTicket()">Créer un ticket</button>
+    <button routerLink="/user/create-ticket">Créer un ticket</button>
   </div>
 
   <!-- Tickets list -->
@@ -64,6 +64,10 @@
           </span>
         </div>
         <div class="ticket-actions">
+          <button class="edit-btn" [routerLink]="['/user/update-ticket', ticket.id]">
+            <i class="material-icons">edit</i>
+            Modifier
+          </button>
           <button class="view-btn" [routerLink]="['/user/ticket', ticket.id]">
             <i class="material-icons">visibility</i>
             Voir
@@ -73,11 +77,11 @@
     </div>
   </div>
 
-  <!-- Overlay pour le formulaire de création de ticket -->
+  <!-- Overlay pour le formulaire de création/mise à jour de ticket -->
   <div class="form-overlay" *ngIf="selectedTicket">
     <div class="create-ticket-container">
       <div class="ticket-form-header">
-        <h2>Créer un Nouveau Ticket</h2>
+        <h2>{{ isEditMode ? 'Modifier le Ticket' : 'Créer un Nouveau Ticket' }}</h2>
         <button class="close-button" (click)="closeForm()">×</button>
       </div>
       
@@ -92,7 +96,7 @@
               id="subject"
               name="subject"
               placeholder="Entrez le sujet de votre ticket"
-              [(ngModel)]="ticket.sujet"
+              [(ngModel)]="selectedTicket.sujet"
               required
             />
           </div>
@@ -106,7 +110,7 @@
               id="description"
               name="description"
               placeholder="Décrivez votre problème ou demande"
-              [(ngModel)]="ticket.description"
+              [(ngModel)]="selectedTicket.description"
               required
             ></textarea>
           </div>
@@ -120,7 +124,7 @@
             <select
               id="priority"
               name="priority"
-              [(ngModel)]="ticket.urgence"
+              [(ngModel)]="selectedTicket.urgence"
               required
             >
               <option value="FAIBLE">Faible</option>
@@ -138,7 +142,7 @@
             <select
               id="type"
               name="type"
-              [(ngModel)]="ticket.type"
+              [(ngModel)]="selectedTicket.type"
               required
             >
               <option value="INCIDENT">Incident</option>
@@ -156,7 +160,7 @@
             <select
               id="group"
               name="group"
-              [(ngModel)]="ticket.groupe.nom"
+              [(ngModel)]="selectedTicket.groupe.nom"
               required
             >
               <option value="Finance">Finance</option>
@@ -173,7 +177,7 @@
             <select
               id="subgroup"
               name="subgroup"
-              [(ngModel)]="ticket.sousGroupe!.nom"
+              [(ngModel)]="selectedTicket.sousGroupe!.nom"
               required
             >
               <option value="Comptabilité">Comptabilité</option>
@@ -184,7 +188,7 @@
         </div>
   
         <!-- Pièces jointes -->
-        <div class="form-group">
+        <div class="form-group" *ngIf="!isEditMode">
           <label for="attachments">Pièces jointes</label>
           <div class="file-upload">
             <label for="attachments">
@@ -203,8 +207,8 @@
   
         <!-- Bouton de soumission -->
         <button type="submit" class="submit-button">
-          <i class="material-icons">send</i>
-          <span>Créer un Ticket</span>
+          <i class="material-icons">{{ isEditMode ? 'update' : 'send' }}</i>
+          <span>{{ isEditMode ? 'Mettre à jour' : 'Créer un Ticket' }}</span>
         </button>
       </form>
     </div>

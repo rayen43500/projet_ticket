@@ -29,6 +29,7 @@ import { UserDashboardComponent } from './user/user-dashboard/user-dashboard.com
 import { CreateTicketComponent } from './user/create-ticket/create-ticket.component';
 import { MyTicketsComponent } from './user/my-tickets/my-tickets.component';
 import { ViewTicketComponent } from './user/view-ticket/view-ticket.component';
+import { UpdateTicketComponent } from './user/update-ticket/update-ticket.component';
 import { IntervenantDashboardComponent } from './intervenant/intervenant-dashboard/intervenant-dashboard.component';
 import { TicketsToHandleComponent } from './intervenant/tickets-to-handle/tickets-to-handle.component';
 import { HeaderComponent } from './header/header.component';
@@ -62,6 +63,7 @@ import { TokenInterceptor } from './services/token.interceptor';
     CreateTicketComponent,
     MyTicketsComponent,
     ViewTicketComponent,
+    UpdateTicketComponent,
     IntervenantDashboardComponent,
     TicketsToHandleComponent,
     LoaderComponent

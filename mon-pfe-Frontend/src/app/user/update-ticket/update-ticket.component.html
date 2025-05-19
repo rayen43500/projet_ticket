@@ -1,0 +1,138 @@
+<div class="update-ticket-container">
+  <div class="ticket-card">
+    <h1>Modifier le Ticket</h1>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="successMessage" class="alert alert-success">
+      {{ successMessage }}
+    </div>
+
+    <!-- Loading spinner while ticket data is being fetched -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Chargement des données du ticket...</p>
+    </div>
+
+    <form *ngIf="!isLoading" [formGroup]="ticketForm" (ngSubmit)="onSubmit()" class="ticket-form">
+      <!-- Sujet du ticket -->
+      <div class="form-group">
+        <label for="sujet">Sujet</label>
+        <div class="input-icon">
+          <i class="material-icons">title</i>
+          <input
+            type="text"
+            id="sujet"
+            formControlName="sujet"
+            placeholder="Entrez le sujet de votre ticket"
+            [ngClass]="{'is-invalid': ticketForm.get('sujet')?.invalid && ticketForm.get('sujet')?.touched}"
+          />
+        </div>
+        <div class="validation-error" *ngIf="ticketForm.get('sujet')?.invalid && ticketForm.get('sujet')?.touched">
+          <span *ngIf="ticketForm.get('sujet')?.errors?.['required']">Le sujet est requis.</span>
+          <span *ngIf="ticketForm.get('sujet')?.errors?.['minlength']">Le sujet doit contenir au moins 5 caractères.</span>
+        </div>
+      </div>
+
+      <!-- Description du ticket -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <div class="textarea-container">
+          <textarea
+            id="description"
+            formControlName="description"
+            placeholder="Décrivez votre problème ou demande"
+            [ngClass]="{'is-invalid': ticketForm.get('description')?.invalid && ticketForm.get('description')?.touched}"
+          ></textarea>
+        </div>
+        <div class="validation-error" *ngIf="ticketForm.get('description')?.invalid && ticketForm.get('description')?.touched">
+          <span *ngIf="ticketForm.get('description')?.errors?.['required']">La description est requise.</span>
+          <span *ngIf="ticketForm.get('description')?.errors?.['minlength']">La description doit contenir au moins 10 caractères.</span>
+        </div>
+      </div>
+
+      <!-- Degré d'urgence -->
+      <div class="form-group">
+        <label for="urgence">Priorité</label>
+        <div class="input-icon">
+          <i class="material-icons">priority_high</i>
+          <select
+            id="urgence"
+            formControlName="urgence"
+          >
+            <option value="FAIBLE">Faible</option>
+            <option value="MOYENNE">Moyenne</option>
+            <option value="HAUTE">Élevée</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Type d'intervention -->
+      <div class="form-group">
+        <label for="type">Type d'Intervention</label>
+        <div class="input-icon">
+          <i class="material-icons">category</i>
+          <select
+            id="type"
+            formControlName="type"
+          >
+            <option value="INCIDENT">Incident</option>
+            <option value="DEMANDE">Demande</option>
+            <option value="ASSISTANCE">Assistance</option>
+            <option value="AUTRE">Autre</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Groupe et sous-groupe -->
+      <div class="form-group">
+        <label for="groupeId">Groupe</label>
+        <div class="input-icon">
+          <i class="material-icons">group_work</i>
+          <select
+            id="groupeId"
+            formControlName="groupeId"
+            [ngClass]="{'is-invalid': ticketForm.get('groupeId')?.invalid && ticketForm.get('groupeId')?.touched}"
+          >
+            <option value="">Sélectionnez un groupe</option>
+            <option *ngFor="let groupe of groupes" [value]="groupe.id">{{ groupe.nom }}</option>
+          </select>
+        </div>
+        <div class="validation-error" *ngIf="ticketForm.get('groupeId')?.invalid && ticketForm.get('groupeId')?.touched">
+          <span *ngIf="ticketForm.get('groupeId')?.errors?.['required']">Le groupe est requis.</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="sousGroupeId">Sous-groupe</label>
+        <div class="input-icon">
+          <i class="material-icons">layers</i>
+          <select
+            id="sousGroupeId"
+            formControlName="sousGroupeId"
+            [disabled]="filteredSousGroupes.length === 0"
+          >
+            <option value="">Sélectionnez un sous-groupe</option>
+            <option *ngFor="let sousGroupe of filteredSousGroupes" [value]="sousGroupe.id">{{ sousGroupe.nom }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="form-actions">
+        <button type="button" class="cancel-button" routerLink="/user/my-tickets">
+          <i class="material-icons">arrow_back</i>
+          <span>Annuler</span>
+        </button>
+        
+        <button type="submit" class="submit-button" [disabled]="isSubmitting">
+          <i class="material-icons">save</i>
+          <span *ngIf="!isSubmitting">Mettre à jour</span>
+          <span *ngIf="isSubmitting">Mise à jour en cours...</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div> 

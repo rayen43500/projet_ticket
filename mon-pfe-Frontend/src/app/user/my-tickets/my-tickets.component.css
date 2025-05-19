@@ -451,6 +451,25 @@ button:hover {
   color: white;
 }
 
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  background-color: #e67e22;
+  color: white;
+  font-size: 0.8rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 5px;
+}
+
+.edit-btn:hover {
+  background-color: #d35400;
+}
+
 /* Form overlay */
 .form-overlay {
   position: fixed;

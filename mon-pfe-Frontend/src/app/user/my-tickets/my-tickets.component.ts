@@ -17,18 +17,15 @@ export class MyTicketsComponent implements OnInit {
   error = '';
   searchTerm = '';
   statusFilter = 'all';
-  ticket: Ticket = this.getEmptyTicket();
   attachments: File[] = [];
   currentUser: Utilisateur | null = null;
+  isEditMode = false;
   
   constructor(
     private ticketService: TicketService, 
     private router: Router,
     private authService: AuthService
   ) {
-    // Ensure ticket has groupe and sousGroupe initialized
-    this.ticket = this.getEmptyTicket();
-    this.ensureTicketHasGroupObjects();
     // Get current user
     this.currentUser = this.authService.getSessionUser();
   }
@@ -110,24 +107,159 @@ export class MyTicketsComponent implements OnInit {
   }
 
   selectTicket(ticket: Ticket): void {
-    if (this.selectedTicket && this.selectedTicket.id === ticket.id) {
-      this.selectedTicket = null;
+    // Charger les détails complets du ticket pour édition
+    this.ticketService.getTicketById(ticket.id!)
+      .subscribe(
+        (data: Ticket) => {
+          this.selectedTicket = data;
+          this.isEditMode = true;
+          this.ensureTicketHasGroupObjects();
+        },
+        (error: any) => {
+          console.error('Erreur lors du chargement des détails du ticket', error);
+        }
+      );
+  }
+
+  createNewTicket(): void {
+    this.selectedTicket = this.getEmptyTicket();
+    this.isEditMode = false;
+    this.ensureTicketHasGroupObjects();
+  }
+
+  closeForm(): void {
+    this.selectedTicket = null;
+    this.isEditMode = false;
+    this.attachments = [];
+  }
+
+  onSubmit(): void {
+    if (!this.selectedTicket) return;
+    
+    // Ensure ticket has required groupe and sousGroupe objects
+    this.ensureTicketHasGroupObjects();
+    
+    if (!this.selectedTicket.sujet || !this.selectedTicket.description || !this.selectedTicket.urgence || !this.selectedTicket.type || 
+        !this.selectedTicket.groupe?.nom || !this.selectedTicket.sousGroupe?.nom) {
+      this.error = 'Veuillez remplir tous les champs obligatoires.';
+      return;
+    }
+    
+    if (!this.currentUser || !this.currentUser.id) {
+      this.error = 'Utilisateur non connecté';
+      return;
+    }
+
+    if (this.isEditMode) {
+      this.updateTicket();
     } else {
-      // Charger les détails complets du ticket
-      this.ticketService.getTicketById(ticket.id!)
-        .subscribe(
-          (data: Ticket) => {
-            this.selectedTicket = data;
-          },
-          (error: any) => {
-            console.error('Erreur lors du chargement des détails du ticket', error);
-          }
-        );
+      this.createTicket();
     }
   }
 
-  closeTicketDetails(): void {
-    this.selectedTicket = null;
+  updateTicket(): void {
+    if (!this.selectedTicket || !this.selectedTicket.id) return;
+    
+    // Préparer les données du ticket à mettre à jour
+    const ticketData = {
+      id: this.selectedTicket.id,
+      sujet: this.selectedTicket.sujet,
+      description: this.selectedTicket.description,
+      type: this.selectedTicket.type,
+      urgence: this.selectedTicket.urgence,
+      groupeId: this.selectedTicket.groupe!.id || this.getGroupIdByName(this.selectedTicket.groupe!.nom),
+      sousGroupeId: this.selectedTicket.sousGroupe!.id || this.getSousGroupIdByName(this.selectedTicket.sousGroupe!.nom)
+    };
+
+    // Utiliser la méthode updateTicket du service
+    this.ticketService.updateTicket(ticketData)
+      .subscribe(
+        () => {
+          this.loadTickets();
+          this.closeForm();
+        },
+        (error: any) => {
+          this.error = "Erreur lors de la mise à jour du ticket.";
+          console.error('Erreur de mise à jour de ticket', error);
+        }
+      );
+  }
+
+  createTicket(): void {
+    if (!this.selectedTicket) return;
+    
+    // Check that we have a user with an ID
+    if (!this.currentUser || !this.currentUser.id) {
+      return;
+    }
+    
+    // Préparer les données du nouveau ticket
+    const ticketData = {
+      sujet: this.selectedTicket.sujet,
+      description: this.selectedTicket.description,
+      type: this.selectedTicket.type,
+      urgence: this.selectedTicket.urgence,
+      createurId: this.currentUser.id, // Ensure this is not undefined
+      groupeId: this.selectedTicket.groupe!.id || this.getGroupIdByName(this.selectedTicket.groupe!.nom),
+      sousGroupeId: this.selectedTicket.sousGroupe!.id || this.getSousGroupIdByName(this.selectedTicket.sousGroupe!.nom)
+    };
+
+    this.ticketService.createTicket(ticketData, this.attachments)
+      .subscribe(
+        () => {
+          this.loadTickets();
+          this.closeForm();
+        },
+        (error: any) => {
+          this.error = "Erreur lors de la création du ticket.";
+          console.error('Erreur de création de ticket', error);
+        }
+      );
+  }
+
+  // Méthode pour garantir que les objets groupe et sousGroupe existent
+  ensureTicketHasGroupObjects(): void {
+    if (!this.selectedTicket) return;
+    
+    if (!this.selectedTicket.groupe) {
+      this.selectedTicket.groupe = {
+        id: 0,
+        nom: ''
+      };
+    }
+    
+    if (!this.selectedTicket.sousGroupe) {
+      this.selectedTicket.sousGroupe = {
+        id: 0,
+        nom: ''
+      };
+    }
+  }
+
+  // Méthodes d'aide pour convertir les noms en IDs
+  getGroupIdByName(name: string): number {
+    const groupMapping: { [key: string]: number } = {
+      'Finance': 1,
+      'Informatique': 2,
+      'Ressources Humaines': 3
+    };
+    return groupMapping[name] || 0;
+  }
+
+  getSousGroupIdByName(name: string): number {
+    const sousGroupMapping: { [key: string]: number } = {
+      'Comptabilité': 1,
+      'Réseau': 2,
+      'Paie': 3
+    };
+    return sousGroupMapping[name] || 0;
+  }
+
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      this.attachments = Array.from(input.files);
+    }
   }
 
   getStatusClass(status: string): string {
@@ -152,6 +284,24 @@ export class MyTicketsComponent implements OnInit {
   formatDate(date: Date | undefined | string): string {
     if (!date) return '';
     return new Date(date).toLocaleDateString('fr-FR');
+  }
+
+  getEmptyTicket(): Ticket {
+    return {
+      sujet: '',
+      description: '',
+      statut: 'EN_ATTENTE',
+      urgence: 'FAIBLE',
+      type: 'INCIDENT',
+      groupe: {
+        id: 0,
+        nom: ''
+      },
+      sousGroupe: {
+        id: 0,
+        nom: ''
+      }
+    };
   }
 
   addComment(ticketId: number, comment: string): void {
@@ -187,111 +337,5 @@ export class MyTicketsComponent implements OnInit {
           console.error('Erreur lors de l\'ajout du commentaire', error);
         }
       );
-  }
-
-  getEmptyTicket(): Ticket {
-    return {
-      sujet: '',
-      description: '',
-      statut: 'EN_ATTENTE',
-      urgence: 'FAIBLE',
-      type: 'INCIDENT',
-      groupe: {
-        id: 0,
-        nom: ''
-      },
-      sousGroupe: {
-        id: 0,
-        nom: ''
-      }
-    };
-  }
-
-  closeForm(): void {
-    this.selectedTicket = null;
-    this.ticket = this.getEmptyTicket();
-    this.attachments = [];
-  }
-
-  onSubmit(): void {
-    // Ensure ticket has required groupe and sousGroupe objects
-    this.ensureTicketHasGroupObjects();
-    
-    if (!this.ticket.sujet || !this.ticket.description || !this.ticket.urgence || !this.ticket.type || 
-        !this.ticket.groupe?.nom || !this.ticket.sousGroupe?.nom) {
-      this.error = 'Veuillez remplir tous les champs obligatoires.';
-      return;
-    }
-    
-    if (!this.currentUser || !this.currentUser.id) {
-      this.error = 'Utilisateur non connecté';
-      return;
-    }
-
-    // Préparer les données du ticket
-    const ticketData = {
-      sujet: this.ticket.sujet,
-      description: this.ticket.description,
-      type: this.ticket.type,
-      urgence: this.ticket.urgence,
-      createurId: this.currentUser.id,
-      groupeId: this.ticket.groupe!.id || this.getGroupIdByName(this.ticket.groupe!.nom),
-      sousGroupeId: this.ticket.sousGroupe!.id || this.getSousGroupIdByName(this.ticket.sousGroupe!.nom)
-    };
-
-    this.ticketService.createTicket(ticketData, this.attachments)
-      .subscribe(
-        () => {
-          this.loadTickets();
-          this.closeForm();
-        },
-        (error: any) => {
-          this.error = "Erreur lors de la création du ticket.";
-          console.error('Erreur de création de ticket', error);
-        }
-      );
-  }
-
-  // Méthode pour garantir que les objets groupe et sousGroupe existent
-  ensureTicketHasGroupObjects(): void {
-    if (!this.ticket.groupe) {
-      this.ticket.groupe = {
-        id: 0,
-        nom: ''
-      };
-    }
-    
-    if (!this.ticket.sousGroupe) {
-      this.ticket.sousGroupe = {
-        id: 0,
-        nom: ''
-      };
-    }
-  }
-
-  // Méthodes d'aide pour convertir les noms en IDs
-  getGroupIdByName(name: string): number {
-    const groupMapping: { [key: string]: number } = {
-      'Finance': 1,
-      'Informatique': 2,
-      'Ressources Humaines': 3
-    };
-    return groupMapping[name] || 0;
-  }
-
-  getSousGroupIdByName(name: string): number {
-    const sousGroupMapping: { [key: string]: number } = {
-      'Comptabilité': 1,
-      'Réseau': 2,
-      'Paie': 3
-    };
-    return sousGroupMapping[name] || 0;
-  }
-
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files) {
-      this.attachments = Array.from(input.files);
-    }
   }
 }

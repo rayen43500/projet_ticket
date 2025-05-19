@@ -15,6 +15,17 @@ interface TicketCreateData {
   [key: string]: any; // Index signature to allow string indexing
 }
 
+interface TicketUpdateData {
+  id: number;
+  sujet: string;
+  description: string;
+  type: string;
+  urgence: string;
+  groupeId: number;
+  sousGroupeId?: number;
+  [key: string]: any; // Index signature to allow string indexing
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -111,6 +122,32 @@ export class TicketService {
 
     // Ne pas spécifier de Content-Type, laissez le navigateur le définir avec boundary
     return this.http.post<Ticket>(this.baseUrl, formData, { withCredentials: true });
+  }
+
+  // Mettre à jour un ticket
+  updateTicket(ticketData: TicketUpdateData): Observable<Ticket> {
+    console.log('Mise à jour du ticket:', ticketData);
+    
+    const params = new HttpParams()
+      .set('sujet', ticketData.sujet)
+      .set('description', ticketData.description)
+      .set('type', ticketData.type)
+      .set('urgence', ticketData.urgence)
+      .set('groupeId', ticketData.groupeId.toString());
+    
+    // Ajouter le sousGroupeId si présent
+    const finalParams = ticketData.sousGroupeId 
+      ? params.set('sousGroupeId', ticketData.sousGroupeId.toString())
+      : params;
+    
+    const options = {
+      params: finalParams,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
+    };
+    
+    return this.http.put<Ticket>(`${this.baseUrl}/${ticketData.id}`, null, options);
   }
 
   // Mettre à jour le statut d'un ticket
