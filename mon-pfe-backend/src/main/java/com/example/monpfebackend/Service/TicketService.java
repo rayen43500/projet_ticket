@@ -265,7 +265,7 @@ public class TicketService {
         commentaireRepository.save(commentaire);
         
         // Notifier les personnes concernées du nouveau commentaire
-        emailService.sendNewCommentNotification(ticket, commentaire);
+        // emailService.sendNewCommentNotification(ticket, commentaire);
     }
     
     // Ajouter une pièce jointe à un ticket
