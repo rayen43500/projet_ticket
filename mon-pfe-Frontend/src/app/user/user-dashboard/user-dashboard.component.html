@@ -77,7 +77,7 @@
         <div class="empty-state" *ngIf="!loading; else loadingTemplate">
           <i class="material-icons">inbox</i>
           <p>Aucun ticket trouvé</p>
-          <button routerLink="/user/my-tickets/new" class="create-ticket-btn">Créer un ticket</button>
+          <button routerLink="/user/create-ticket" class="create-ticket-btn">Créer un ticket</button>
         </div>
         <ng-template #loadingTemplate>
           <div class="loading-spinner">
@@ -122,7 +122,7 @@
   <div class="quick-actions">
     <h2>Actions rapides</h2>
     <div class="actions-container">
-      <button class="action-card" routerLink="/user/my-tickets/new">
+      <button class="action-card" routerLink="/user/create-ticket">
         <i class="material-icons">add_circle</i>
         <span>Nouveau ticket</span>
       </button>

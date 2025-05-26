@@ -44,8 +44,7 @@ public class TicketService {
     @Autowired
     private CommentaireRepository commentaireRepository;
     
-    @Autowired
-    private EmailService emailService;
+    
 
     private final Path fileStorageLocation = Paths.get("uploads");
 
@@ -154,7 +153,7 @@ public class TicketService {
         // Si le ticket est clôturé, on peut envoyer une notification par email
         if (newStatus == Ticket.Statut.CLOTURE && oldStatus != Ticket.Statut.CLOTURE) {
             // Notification par email
-            emailService.sendTicketClosedNotification(ticket);
+            // // emailservice.sendTicketClosedNotification(ticket);
         }
         
         return new TicketDTO(ticketRepository.save(ticket));
@@ -187,7 +186,7 @@ public class TicketService {
         }
         
         // Envoyer une notification à l'intervenant
-        emailService.sendTicketAssignedNotification(ticket);
+        // emailservice.sendTicketAssignedNotification(ticket);
         
         return new TicketDTO(ticketRepository.save(ticket));
     }
@@ -242,7 +241,7 @@ public class TicketService {
         }
         
         // Notifier les intervenants du groupe qu'un nouveau ticket a été créé
-        emailService.sendNewTicketNotification(savedTicket);
+        // // emailservice.sendNewTicketNotification(savedTicket);
         
         return new TicketDTO(savedTicket);
     }
@@ -265,7 +264,7 @@ public class TicketService {
         commentaireRepository.save(commentaire);
         
         // Notifier les personnes concernées du nouveau commentaire
-        // emailService.sendNewCommentNotification(ticket, commentaire);
+        // // emailservice.sendNewCommentNotification(ticket, commentaire);
     }
     
     // Ajouter une pièce jointe à un ticket
