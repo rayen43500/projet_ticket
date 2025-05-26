@@ -4,155 +4,53 @@
     <div class="date-display">{{ today | date: 'EEEE dd MMMM yyyy' }}</div>
   </div>
 
-  <!-- Statistics Summary Cards -->
-  <div class="stats-cards">
-    <div class="stat-card">
-      <div class="stat-icon blue">
+  <!-- Main Feature Cards -->
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
         <i class="material-icons">people</i>
       </div>
-      <div class="stat-info">
-        <h3>{{ userStats.total }}</h3>
-        <p>Utilisateurs</p>
-      </div>
-      <div class="stat-footer">
-        <span class="trend up">
-          <i class="material-icons">trending_up</i> {{ userStats.percentChange }}%
-        </span>
-        <span class="period">Ce mois</span>
-      </div>
+      <h3>Gestion des utilisateurs</h3>
+      <p>Créez, modifiez et gérez les comptes utilisateurs. Attribuez des rôles et des permissions pour contrôler l'accès au système.</p>
+      <div class="feature-stats"></div>
+      <a routerLink="/admin/users" class="feature-link">
+        Gérer les utilisateurs <i class="material-icons">arrow_forward</i>
+      </a>
     </div>
     
-    <div class="stat-card">
-      <div class="stat-icon green">
-        <i class="material-icons">group</i>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="material-icons">groups</i>
       </div>
-      <div class="stat-info">
-        <h3>{{ groupStats.total }}</h3>
-        <p>Groupes</p>
-      </div>
-      <div class="stat-footer">
-        <span class="trend neutral">
-          <i class="material-icons">trending_flat</i> {{ groupStats.percentChange }}%
-        </span>
-        <span class="period">Ce mois</span>
-      </div>
+      <h3>Gestion des groupes</h3>
+      <p>Organisez les utilisateurs en groupes fonctionnels pour faciliter la gestion des permissions et l'attribution des tickets selon les responsabilités.</p>
+      <div class="feature-stats"></div>
+      <a routerLink="/admin/groups" class="feature-link">
+        Gérer les groupes <i class="material-icons">arrow_forward</i>
+      </a>
     </div>
     
-    <div class="stat-card">
-      <div class="stat-icon purple">
-        <i class="material-icons">folder</i>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="material-icons">account_tree</i>
       </div>
-      <div class="stat-info">
-        <h3>{{ subgroupStats.total }}</h3>
-        <p>Sous-groupes</p>
-      </div>
-      <div class="stat-footer">
-        <span class="trend up">
-          <i class="material-icons">trending_up</i> {{ subgroupStats.percentChange }}%
-        </span>
-        <span class="period">Ce mois</span>
-      </div>
+      <h3>Gestion des sous-groupes</h3>
+      <p>Créez des sous-groupes pour une organisation plus fine et une meilleure répartition des tâches. Définissez des hiérarchies pour optimiser le flux de travail.</p>
+      <div class="feature-stats"></div>
+      <a routerLink="/admin/subgroups" class="feature-link">
+        Gérer les sous-groupes <i class="material-icons">arrow_forward</i>
+      </a>
     </div>
     
-    <div class="stat-card">
-      <div class="stat-icon orange">
+    <div class="feature-card">
+      <div class="feature-icon">
         <i class="material-icons">all_inbox</i>
       </div>
-      <div class="stat-info">
-        <h3>{{ ticketStats.total }}</h3>
-        <p>Tickets</p>
-      </div>
-      <div class="stat-footer">
-        <span class="trend up">
-          <i class="material-icons">trending_up</i> {{ ticketStats.percentChange }}%
-        </span>
-        <span class="period">Ce mois</span>
-      </div>
+      <h3>Gestion des tickets</h3>
+      <p>Supervisez tous les tickets du système. Suivez leur progression, assignez-les aux intervenants et assurez leur résolution dans les délais.</p>
+      <div class="feature-stats"></div>
+      <a routerLink="/admin/tickets" class="feature-link">
+        Gérer les tickets <i class="material-icons">arrow_forward</i>
+      </a>
     </div>
   </div>
-  
-  <!-- Charts Section -->
-  <div class="charts-container">
-    <div class="chart-card">
-      <div class="chart-header">
-        <h3>Tickets par statut</h3>
-        <div class="chart-controls">
-          <select [(ngModel)]="ticketChartPeriod">
-            <option value="week">Cette semaine</option>
-            <option value="month">Ce mois</option>
-            <option value="year">Cette année</option>
-          </select>
-        </div>
-      </div>
-      <div class="chart-body">
-        <canvas id="ticketStatusChart"></canvas>
-      </div>
-    </div>
-    
-    <div class="chart-card">
-      <div class="chart-header">
-        <h3>Utilisateurs par rôle</h3>
-      </div>
-      <div class="chart-body">
-        <canvas id="userRolesChart"></canvas>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Second Row of Charts -->
-  <div class="charts-container">
-    <div class="chart-card">
-      <div class="chart-header">
-        <h3>Tickets par groupe</h3>
-      </div>
-      <div class="chart-body">
-        <canvas id="ticketsPerGroupChart"></canvas>
-      </div>
-    </div>
-    
-    <div class="chart-card">
-      <div class="chart-header">
-        <h3>Activité récente</h3>
-      </div>
-      <div class="chart-body activity-list">
-        <div class="activity-item" *ngFor="let activity of recentActivity">
-          <div class="activity-icon">
-            <i class="material-icons">{{ activity.icon }}</i>
-          </div>
-          <div class="activity-details">
-            <div class="activity-title">{{ activity.title }}</div>
-            <div class="activity-subtitle">{{ activity.subtitle }}</div>
-          </div>
-          <div class="activity-time">{{ activity.time | date: 'shortTime' }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Quick Actions Section -->
-  <div class="quick-actions">
-    <h3>Actions rapides</h3>
-    <div class="action-buttons">
-      <button class="action-button" routerLink="/admin/users">
-        <i class="material-icons">person_add</i>
-        <span>Ajouter un utilisateur</span>
-      </button>
-      <button class="action-button" routerLink="/admin/groups">
-        <i class="material-icons">group_add</i>
-        <span>Créer un groupe</span>
-      </button>
-      <button class="action-button" routerLink="/admin/subgroups">
-        <i class="material-icons">create_new_folder</i>
-        <span>Ajouter un sous-groupe</span>
-      </button>
-      <button class="action-button" (click)="downloadReport()">
-        <i class="material-icons">download</i>
-        <span>Télécharger le rapport</span>
-      </button>
-      <button class="action-button logout-action" (click)="logout()">
-        <i class="material-icons">exit_to_app</i>
-        <span>Déconnexion</span>
-      </button>
-    </div>
-  </div>
-</div>
