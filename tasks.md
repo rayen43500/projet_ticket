@@ -32,4 +32,4 @@
 - [x] Implémenter le calcul et l'affichage du total des tickets par priorité
 - [x] Développer les graphiques de pourcentage des tickets par groupe de projet
 - [x] Créer les diagrammes de pourcentage des tickets par état pour chaque projet
-- [x] Concevoir un système d'analyse des types d'interventions récurrentes
+- [x] Concevoir un système d'analyse des types d'interventions récurrentes/////////////////
