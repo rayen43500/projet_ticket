@@ -1,61 +1,70 @@
 :root {
-  --sidebar-width: 80px;
+  /* Layout */
+  --sidebar-width: 60px;
   --sidebar-expanded-width: 260px;
-  --sidebar-bg: #ffffff;
+  --radius: 20px;
+
+  /* Colors */
+  --sidebar-bg: rgba(255, 255, 255, 0.85);
   --primary-color: #1e3c72;
   --hover-color: #2a5298;
   --text-color: #222;
-  --shadow-color: rgba(0, 0, 0, 0.1);
   --hover-bg: #f0f4f9;
-  --transition: 0.4s ease-in-out;
-  --radius: 20px;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+
+  /* Font sizes */
   --font-base: 1.1rem;
   --font-large: 1.3rem;
   --font-icon: 1.7rem;
+
+  /* Effects */
+  --transition: 0.3s ease-in-out;
 }
 
 .sidebar {
-  width: var(--sidebar-width);
-  height: 100vh;
-  background-color: var(--sidebar-bg);
-  box-shadow: 2px 0 12px var(--shadow-color);
-  transition: width var(--transition);
   position: fixed;
   top: 0;
   left: 0;
   z-index: 1000;
-  overflow: hidden;
+  width: var(--sidebar-width);
+  height: 100vh;
+  margin-top: 100px;
+  background-color: var(--sidebar-bg);
+  backdrop-filter: blur(10px);
+  box-shadow: 2px 0 12px var(--shadow-color);
   border-radius: 0 var(--radius) var(--radius) 0;
+  overflow: hidden;
+  transition: width var(--transition);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 100px;
 }
 
 .sidebar.expanded {
   width: var(--sidebar-expanded-width);
 }
 
-/* Header */
+/* Sidebar Header */
 .sidebar-header {
-  padding: 2rem 1rem;
-  border-bottom: 1px solid #eee;
+  padding: 1.5rem 1rem;
   text-align: center;
+  border-bottom: 1px solid #eee;
   font-size: var(--font-large);
-  color: var(--primary-color);
   font-weight: 600;
+  color: var(--primary-color);
 }
 
-/* Profile */
+/* Profile Section */
 .profile-section {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 0.8rem;
+  padding-left: 10px;
 }
 
 .profile-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: var(--primary-color);
   transition: transform 0.3s ease;
 }
@@ -66,10 +75,14 @@
 
 .profile-text {
   font-size: var(--font-base);
-  opacity: 0;
-  transition: opacity var(--transition);
   font-weight: 500;
   color: var(--text-color);
+  opacity: 0;
+  transition: opacity var(--transition);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .sidebar.expanded .profile-text {
@@ -82,27 +95,36 @@
   padding: 1rem 0;
   margin: 0;
   flex-grow: 1;
+  overflow-y: auto;
 }
 
 .sidebar-menu li {
-  margin: 0.6rem 0;
+  margin: 0.5rem 0;
+  padding: 0 0.5rem;
 }
 
 .sidebar-menu a {
   display: flex;
   align-items: center;
-  padding: 0.9rem 1.5rem;
+  padding: 0.8rem 1rem;
   color: var(--text-color);
   text-decoration: none;
-  transition: background 0.3s ease, color 0.3s ease;
-  border-radius: 10px;
   font-size: var(--font-base);
   font-weight: 500;
+  border-radius: 10px;
+  transition: background 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
 }
 
 .sidebar-menu a:hover {
   background-color: var(--hover-bg);
   color: var(--hover-color);
+}
+
+.sidebar-menu a.active {
+  background-color: var(--hover-bg);
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
 .sidebar-menu i {
@@ -120,17 +142,19 @@
 .sidebar-menu span {
   opacity: 0;
   transition: opacity var(--transition);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar.expanded .sidebar-menu span {
   opacity: 1;
 }
 
-/* Logout */
+/* Logout Section */
 .logout-section {
   padding: 1.5rem;
-  border-top: 1px solid #eee;
   text-align: center;
+  border-top: 1px solid #eee;
 }
 
 .logout-section a {
@@ -140,11 +164,11 @@
   gap: 1rem;
   color: var(--text-color);
   text-decoration: none;
-  transition: color 0.3s ease;
-  cursor: pointer;
-  border-radius: 10px;
   font-size: var(--font-base);
   font-weight: 500;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .logout-section a:hover {
@@ -159,4 +183,25 @@
 
 .logout-section a:hover i {
   transform: rotate(-10deg);
+}
+
+.logout-section span {
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.sidebar.expanded .logout-section span {
+  opacity: 1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 0;
+    margin-top: 80px;
+  }
+  
+  .sidebar.expanded {
+    width: var(--sidebar-expanded-width);
+  }
 }

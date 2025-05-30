@@ -57,8 +57,11 @@ export class IntervenantDashboardComponent implements OnInit {
     // Tickets assignés à l'intervenant
     this.ticketService.getTicketsForIntervenant(this.currentUser.id).subscribe({
       next: (tickets) => {
-        this.filterTicketsByStatus(tickets);
-        this.ticketsRecents = [...tickets].sort((a, b) => 
+        // Filtrer les tickets valides
+        const validTickets = tickets.filter(t => t && t.sujet && t.statut);
+        
+        this.filterTicketsByStatus(validTickets);
+        this.ticketsRecents = [...validTickets].sort((a, b) => 
           new Date(b.dateCreation || 0).getTime() - new Date(a.dateCreation || 0).getTime()
         ).slice(0, 5);
         this.loading = false;
@@ -84,9 +87,12 @@ export class IntervenantDashboardComponent implements OnInit {
   }
 
   filterTicketsByStatus(tickets: Ticket[]): void {
-    this.ticketsEnAttente = tickets.filter(t => t.statut === 'EN_ATTENTE');
-    this.ticketsEnCours = tickets.filter(t => t.statut === 'EN_COURS');
-    this.ticketsTraites = tickets.filter(t => t.statut === 'TRAITE');
+    // Filtrer les tickets valides (avec des valeurs non nulles pour les champs essentiels)
+    const validTickets = tickets.filter(t => t && t.sujet && t.statut);
+    
+    this.ticketsEnAttente = validTickets.filter(t => t.statut === 'EN_ATTENTE');
+    this.ticketsEnCours = validTickets.filter(t => t.statut === 'EN_COURS');
+    this.ticketsTraites = validTickets.filter(t => t.statut === 'TRAITE');
   }
 
   viewTicketDetails(ticketId: number): void {

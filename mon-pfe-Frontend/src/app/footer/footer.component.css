@@ -1,13 +1,19 @@
 .dashboard-footer {
-  background-color: #ffffff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
-  padding: 20px 0;
+  background: linear-gradient(to right, #ffffff, #f8f9fa);
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+  padding: 25px 0;
   font-size: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1001; /* Au-dessus de la sidebar */
+  margin-left: 0; /* Ne pas être affecté par la sidebar */
+  width: 100%;
 }
 
 .footer-copyright {
-  color: #718096;
+  color: #5a6c87;
   margin-left: 20px; 
+  font-weight: 500;
 }
 
 .footer-content {
@@ -16,23 +22,41 @@
   align-items: center;
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 25px;
+  padding: 0 25px 0 calc(270px + 25px); /* Ajout d'un padding pour la sidebar */
   flex-wrap: wrap;
 }
 
 .footer-links {
   display: flex;
-  gap: 20px;
+  gap: 25px;
 }
 
 .footer-links a {
   color: #4a5568;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  font-weight: 500;
+  padding: 5px 0;
+}
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #3182ce;
+  transition: width 0.3s ease;
 }
 
 .footer-links a:hover {
   color: #3182ce;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
 }
 
 .footer-social {
@@ -40,17 +64,17 @@
   gap: 15px;
 }
 
-/* Supprimer color par défaut ici */
 .social-icon {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #f7fafc;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   font-size: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Couleurs permanentes par plateforme */
@@ -69,7 +93,7 @@
 /* Effet hover uniquement sur le fond */
 .social-icon:hover {
   transform: translateY(-3px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
 }
 
 .social-icon.linkedin:hover {
@@ -87,6 +111,11 @@
   color: white;
 }
 
+@media (max-width: 992px) {
+  .footer-content {
+    padding: 0 25px; /* Réinitialiser le padding pour les petits écrans */
+  }
+}
 
 @media (max-width: 768px) {
   .footer-content {
@@ -97,6 +126,10 @@
 
   .footer-links {
     flex-direction: column;
-    gap: 10px;
+    gap: 15px;
+  }
+  
+  .footer-copyright {
+    margin-left: 0;
   }
 }

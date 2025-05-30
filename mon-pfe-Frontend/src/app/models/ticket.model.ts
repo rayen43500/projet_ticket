@@ -28,7 +28,7 @@ export interface Ticket {
     nom: string;
     email?: string;
   };
-  groupe: {
+  groupe?: {
     id: number;
     nom: string;
   };

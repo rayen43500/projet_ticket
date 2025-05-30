@@ -67,7 +67,7 @@
             <span class="ticket-type">{{ticket.type}}</span>
           </div>
           <div class="ticket-creator">
-            <span>Créé par: {{ticket.createur?.nom}}</span>
+            <span>Créé par: {{ticket.createur?.nom || 'Utilisateur inconnu'}}</span>
           </div>
         </div>
         <div class="no-tickets" *ngIf="ticketsRecents.length === 0">
@@ -107,7 +107,7 @@
                 <td>
                   <span class="urgency-badge" [ngClass]="getUrgencyClass(ticket.urgence)">{{ticket.urgence}}</span>
                 </td>
-                <td>{{ticket.groupe.nom}}</td>
+                <td>{{ticket.groupe?.nom || 'Non assigné'}}</td>
                 <td>{{ticket.dateCreation | date:'dd/MM/yyyy'}}</td>
                 <td>
                   <button class="btn-action" (click)="takeTicket(ticket)">Prendre en charge</button>
