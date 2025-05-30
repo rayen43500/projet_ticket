@@ -18,7 +18,6 @@
   width: 100%;
   margin: 0 auto;
 }
-
 /* Brand Section */
 .navbar-brand-section {
   display: flex;
@@ -32,9 +31,11 @@
 }
 
 .logo {
-  width: 40px;
+  width: 50px;
   height: auto;
   transition: transform 0.2s ease;
+  margin-left: 20px;
+  
 }
 
 .brand-name {
@@ -43,6 +44,31 @@
   color: #2c3e50;
   margin-left: 10px;
   display: none;
+}
+
+/* Icône de compte moderne */
+.account-icon {
+  font-size: 32px;
+  color: #2c3e50;
+  transition: transform 0.2s ease;
+}
+
+.user-info:hover .account-icon {
+  transform: scale(1.1);
+}
+
+/* Nom d'utilisateur (déjà existant, inchangé) */
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2d3748;
+  display: none;
+}
+
+@media (min-width: 992px) {
+  .user-name {
+    display: inline;
+  }
 }
 
 @media (min-width: 768px) {
@@ -225,7 +251,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  background-color: #f56565;
+  background-color: #ca4040;
   color: white;
   border: none;
   border-radius: 6px;

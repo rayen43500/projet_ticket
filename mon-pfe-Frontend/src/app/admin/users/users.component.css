@@ -2,7 +2,7 @@
   font-family: 'Segoe UI', sans-serif;
   margin-left: 100px;
   transition: margin 0.3s ease;
-  margin-bottom: 200px;
+  margin-bottom: 400px;
 
   @media (max-width: 768px) {
     margin-left: 100px;

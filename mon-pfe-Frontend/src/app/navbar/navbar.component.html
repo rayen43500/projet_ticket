@@ -4,7 +4,6 @@
     <div class="navbar-brand-section">
       <a class="navbar-brand">
         <img src="assets/Logo_Entreprise.png" alt="Logo" class="logo">
-        <span class="brand-name">PFE Manager</span>
       </a>
     </div>
 
@@ -29,15 +28,14 @@
           <span class="badge">5</span>
         </button>
         <div class="user-info">
+          <i class="material-icons account-icon">account_circle</i>
           <span class="user-name">{{ currentUser?.nom || 'Utilisateur' }}</span>
-          <img src="assets/images/user-avatar.png" alt="Avatar" class="user-avatar">
         </div>
+        
         <button class="logout-btn" title="Se déconnecter" (click)="logout()">
           <i class="material-icons">exit_to_app</i>
-          <span>Déconnexion</span>
         </button>
       </div>
-
       <!-- For not logged-in users -->
       <div class="auth-controls" *ngIf="!isLogged">
         <ul class="navbar-nav">
@@ -48,10 +46,10 @@
             <a class="nav-link" routerLink="/register" routerLinkActive="active">S'inscrire</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link login-btn" routerLink="/login" routerLinkActive="active">Connexion</a>
+            <a class="nav-link" routerLink="/contact" routerLinkActive="active">Contact</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/contact" routerLinkActive="active">Contact</a>
+            <a class="nav-link login-btn" routerLink="/login" routerLinkActive="active">Connexion</a>
           </li>
         </ul>
       </div>
