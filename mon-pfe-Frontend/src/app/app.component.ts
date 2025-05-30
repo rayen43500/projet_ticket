@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { LoadingService } from './services/loading.service';
-import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
+import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError, Event } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SidebarComponent } from './sidebar/sidebar.component';
 
@@ -11,13 +11,21 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'mon-pfe';
+  isHomePage = false;
   
   @ViewChild(SidebarComponent) sidebar!: SidebarComponent;
 
   constructor(
     private loadingService: LoadingService,
     private router: Router
-  ) {}
+  ) {
+    // Détecter si nous sommes sur la page d'accueil
+    this.router.events.subscribe((event: Event) => {
+      if (event instanceof NavigationEnd) {
+        this.isHomePage = event.url === '/home' || event.url === '/';
+      }
+    });
+  }
 
   ngOnInit() {
     this.router.events
@@ -38,13 +46,18 @@ export class AppComponent implements OnInit, AfterViewInit {
             this.loadingService.hideLoader();
           }, 300); // Small delay to ensure smooth transitions
         }
+        
+        // Mettre à jour l'état de la page d'accueil
+        if (event instanceof NavigationEnd) {
+          this.isHomePage = event.url === '/home' || event.url === '/';
+        }
       });
   }
 
   ngAfterViewInit() {
     // Assurer que le content area s'ajuste correctement après le chargement de la page
     setTimeout(() => {
-      if (this.sidebar) {
+      if (this.sidebar && !this.isHomePage) {
         this.sidebar.adjustContentArea();
       }
     }, 100);

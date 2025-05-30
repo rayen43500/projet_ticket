@@ -11,12 +11,12 @@
   color: #fff;
   overflow: hidden;
 
-  /* Image de fond en plein écran avec un filtre amélioré */
+  /* Image de fond en plein écran */
   background: 
-    linear-gradient(135deg, rgba(17, 34, 64, 0.8), rgba(30, 55, 112, 0.7)),
+    linear-gradient(135deg, rgba(30, 60, 114, 0.7), rgba(42, 82, 152, 0.7)),
     url('/assets/lol.jpg') center center / cover no-repeat;
   background-attachment: fixed;
-  position: fixed; /* Position fixe pour couvrir tout l'écran */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -30,231 +30,96 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+  background: linear-gradient(135deg, rgba(30, 60, 114, 0.3), rgba(42, 82, 152, 0.3));
   backdrop-filter: blur(2px);
   z-index: 1;
 }
 
 .hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 2; /* au-dessus de l'overlay */
   text-align: center;
-  max-width: 80%; /* Augmenté pour occuper plus d'espace */
-  width: 80%; /* Largeur fixe en pourcentage de l'écran */
-  padding: 4rem; /* Padding augmenté */
-  animation: fadeInUp 1.2s ease-in-out;
+  max-width: 800px;
+  padding: 2rem;
+  animation: fadeInUp 1s ease-in-out; /* animation à l'apparition */
   background: rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transform: translateY(-30px);
-  margin: 0 auto; /* Centrage horizontal */
-  min-height: 60vh; /* Hauteur minimum pour occuper plus d'espace vertical */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  border-radius: 15px;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hero-content h1 {
-  font-size: 5rem; /* Taille augmentée */
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 2rem; /* Marge augmentée */
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  letter-spacing: -0.5px;
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .hero-content h1 span {
-  background: linear-gradient(90deg, #ffd700, #ffffff, #ffd700);
-  background-size: 200% auto;
+  color: #ffd700; /* Jaune or */
+  background: linear-gradient(-60deg, #ffd700, #ffffff); /* Dégradé sur texte */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: shine 3s linear infinite;
-}
-
-@keyframes shine {
-  to {
-    background-position: 200% center;
-  }
 }
 
 .hero-content p {
-  font-size: 1.8rem; /* Taille augmentée */
-  margin-bottom: 4rem; /* Marge augmentée */
+  font-size: 1.4rem;
+  margin-bottom: 2.5rem;
   color: #ffffff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  max-width: 80%; /* Augmenté pour occuper plus d'espace */
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
 .cta-button {
-  background: linear-gradient(45deg, #ffffff, #f0f0f0);
+  background: #fff;
   color: #1e3c72;
-  padding: 1.5rem 4rem; /* Padding augmenté */
+  padding: 1rem 2.5rem;
   border: none;
-  border-radius: 50px; 
+  border-radius: 40px; 
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1.6rem; /* Taille augmentée */
-  transition: all 0.4s ease-in-out;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  font-size: 1.2rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
   display: inline-block;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.cta-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: all 0.6s;
-  z-index: -1;
 }
 
 .cta-button:hover {
-  background: linear-gradient(45deg, #ffd700, #f5c400);
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
-  color: #1a305e;
-}
-
-.cta-button:hover::before {
-  left: 100%;
+  background: #debd00;
+  transform: translateY(-4px) scale(1.02); /* effet de hover */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .cta-button:active {
-  transform: scale(0.98); 
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transform: scale(1); 
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-/* Animation d'apparition du haut vers le bas avec rebond */
+/* Animation d'apparition du haut vers le bas */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(40px);
-  }
-  70% {
-    transform: translateY(-10px);
+    transform: translateY(20px);
   }
   100% {
     opacity: 1;
-    transform: translateY(-30px);
-  }
-}
-
-/* Animation de flottement pour le contenu */
-.hero-content {
-  animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(-30px);
-  }
-  50% {
-    transform: translateY(-40px);
-  }
-  100% {
-    transform: translateY(-30px);
+    transform: translateY(0);
   }
 }
 
 /* Responsive : ajustement sur petits écrans */
-@media (max-width: 1200px) {
-  .hero-content {
-    max-width: 90%;
-    width: 90%;
-    padding: 3.5rem;
-    min-height: 50vh;
-  }
-  
-  .hero-content h1 {
-    font-size: 4.5rem;
-  }
-  
-  .hero-content p {
-    font-size: 1.6rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .hero-content {
-    padding: 3rem;
-    max-width: 90%;
-    width: 90%;
-    min-height: 40vh;
-  }
-  
-  .hero-content h1 {
-    font-size: 4rem;
-  }
-  
-  .hero-content p {
-    font-size: 1.5rem;
-    max-width: 90%;
-  }
-  
-  .cta-button {
-    padding: 1.3rem 3.5rem;
-    font-size: 1.5rem;
-  }
-}
-
 @media (max-width: 768px) {
-  .hero-content {
-    padding: 2.5rem;
-    min-height: auto;
-  }
-  
   .hero-content h1 {
-    font-size: 3.2rem; 
+    font-size: 2.5rem; 
   }
 
   .hero-content p {
-    font-size: 1.3rem;
-    margin-bottom: 3rem;
+    font-size: 1.1rem;
   }
   
   .cta-button {
-    padding: 1.2rem 3rem;
-    font-size: 1.3rem;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
   }
-}
-
-@media (max-width: 576px) {
-  .hero-content {
-    padding: 2rem;
-    width: 95%;
-  }
-  
-  .hero-content h1 {
-    font-size: 2.8rem;
-  }
-  
-  .hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 2.5rem;
-  }
-  
-  .cta-button {
-    padding: 1rem 2.5rem;
-    font-size: 1.2rem;
-  }
-}
-
-/* Pour garantir que le header est vraiment en plein écran */
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  width: 100%;
-  height: 100%;
 }

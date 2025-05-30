@@ -1,6 +1,8 @@
-<div class="app-container">
+<div class="app-container" [ngClass]="{'home-page': isHomePage}">
   <app-navbar></app-navbar>
-  <div class="dashboard-layout">
+  
+  <!-- Layout conditionnel en fonction de la page -->
+  <div class="dashboard-layout" *ngIf="!isHomePage">
     <app-sidebar></app-sidebar>
     <main class="content-area">
       <!-- Loader component for page transitions -->
@@ -9,5 +11,11 @@
       <router-outlet></router-outlet>
     </main>
   </div>
+  
+  <!-- Affichage spécial pour la page d'accueil -->
+  <div class="home-layout" *ngIf="isHomePage">
+    <router-outlet></router-outlet>
+  </div>
+  
   <app-footer></app-footer>
 </div>
