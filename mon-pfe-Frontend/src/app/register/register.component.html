@@ -25,14 +25,18 @@
                 formControlName="fullName"
                 placeholder="Nom complet"
                 [ngClass]="{
-                  'invalid': f['fullName'].touched && f['fullName'].invalid,
-                  'valid': f['fullName'].touched && f['fullName'].valid
+                  'invalid': (f['fullName'].touched && f['fullName'].invalid) || errorType === 'fullName',
+                  'valid': f['fullName'].touched && f['fullName'].valid && errorType !== 'fullName'
                 }"
               />
               <span
-                *ngIf="f['fullName'].touched && f['fullName'].invalid"
+                *ngIf="f['fullName'].touched && !f['fullName'].value"
                 class="required-inside"
               >*</span>
+            </div>
+            <!-- Full Name specific error -->
+            <div *ngIf="errorType === 'fullName'" class="field-error-message">
+              {{ errorMessage }}
             </div>
         </div>
 
@@ -45,14 +49,18 @@
                 formControlName="email"
                 placeholder="Email"
                 [ngClass]="{
-                  'invalid': f['email'].touched && f['email'].invalid,
-                  'valid': f['email'].touched && f['email'].valid
+                  'invalid': (f['email'].touched && f['email'].invalid) || errorType === 'email',
+                  'valid': f['email'].touched && f['email'].valid && errorType !== 'email'
                 }"
               />
               <span
                 *ngIf="f['email'].touched && !f['email'].value"
                 class="required-inside"
               >*</span>
+            </div>
+            <!-- Email specific error -->
+            <div *ngIf="errorType === 'email'" class="field-error-message">
+              {{ errorMessage }}
             </div>
         </div>
 
@@ -69,8 +77,8 @@
                 (focus)="isPasswordFocused = true"
                 (blur)="isPasswordFocused = false"
                 [ngClass]="{
-                  'invalid': f['password'].touched && f['password'].invalid,
-                  'valid': f['password'].touched && f['password'].valid
+                  'invalid': (f['password'].touched && f['password'].invalid) || errorType === 'password',
+                  'valid': f['password'].touched && f['password'].valid && errorType !== 'password'
                 }"
               />
               <i
@@ -97,6 +105,10 @@
                 {{ passwordStrengthMessage }}
               </span>
             </div>
+            <!-- Password specific error -->
+            <div *ngIf="errorType === 'password'" class="field-error-message">
+              {{ errorMessage }}
+            </div>
         </div>
 
         <!-- Confirm Password Field -->
@@ -108,11 +120,11 @@
                 formControlName="confirmPassword"
                 placeholder="Confirmer mot de passe"
                 [ngClass]="{
-                  'invalid': f['confirmPassword'].touched && 
-                             (f['confirmPassword'].invalid || registerForm.errors?.['passwordsMismatch']),
+                  'invalid': (f['confirmPassword'].touched && 
+                             (f['confirmPassword'].invalid || registerForm.errors?.['passwordsMismatch'])) || errorType === 'confirmPassword',
                   'valid': f['confirmPassword'].touched && 
                            f['confirmPassword'].valid && 
-                           !registerForm.errors?.['passwordsMismatch']
+                           !registerForm.errors?.['passwordsMismatch'] && errorType !== 'confirmPassword'
                 }"
               />
               <i
@@ -126,6 +138,15 @@
                 class="required-inside"
               >*</span>
             </div>
+            <!-- Confirm Password specific error -->
+            <div *ngIf="errorType === 'confirmPassword'" class="field-error-message">
+              {{ errorMessage }}
+            </div>
+        </div>
+
+        <!-- General error message -->
+        <div *ngIf="errorType === 'server'" class="error-message">
+          {{ errorMessage }}
         </div>
 
         <!-- Submit Button -->

@@ -42,7 +42,7 @@
       </div>
       <div class="stats-details">
         <h2 class="stats-count">{{ resolvedTickets }}</h2>
-        <p class="stats-label">Résolus</p>
+        <p class="stats-label"> Traite </p>
       </div>
       <div class="stats-progress">
         <div class="progress-bar" [style.width.%]="(resolvedTickets / (totalTickets || 1)) * 100"></div>
@@ -55,7 +55,7 @@
       </div>
       <div class="stats-details">
         <h2 class="stats-count">{{ totalTickets }}</h2>
-        <p class="stats-label">Total</p>
+        <p class="stats-label">Cloture</p>
       </div>
       <div class="stats-progress">
         <div class="progress-bar" [style.width.%]="100"></div>

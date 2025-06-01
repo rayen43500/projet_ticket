@@ -67,10 +67,10 @@ export class UserDashboardComponent implements OnInit {
           ).slice(0, 5); // Prendre les 5 tickets les plus récents
           
           // Calculer les statistiques
-          this.totalTickets = tickets.length;
+          this.totalTickets = tickets.filter(t => t.statut === 'CLOTURE').length;
           this.pendingTickets = tickets.filter(t => t.statut === 'EN_ATTENTE').length;
           this.inProgressTickets = tickets.filter(t => t.statut === 'EN_COURS').length;
-          this.resolvedTickets = tickets.filter(t => t.statut === 'TRAITE' || t.statut === 'CLOTURE').length;
+          this.resolvedTickets = tickets.filter(t => t.statut === 'TRAITE').length;
           this.loading = false;
         },
         (error: any) => {

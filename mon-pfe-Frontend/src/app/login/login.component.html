@@ -21,14 +21,18 @@
               formControlName="email"
               placeholder="Email"
               [ngClass]="{
-                'invalid': f['email'].touched && f['email'].invalid,
-                'valid': f['email'].touched && f['email'].valid
+                'invalid': (f['email'].touched && f['email'].invalid) || errorType === 'email',
+                'valid': f['email'].touched && f['email'].valid && errorType !== 'email'
               }"
             />
             <span
               *ngIf="f['email'].touched && !f['email'].value"
               class="required-inside"
               >*</span>
+          </div>
+          <!-- Email specific error -->
+          <div *ngIf="errorType === 'email'" class="field-error-message">
+            {{ errorMessage }}
           </div>
         </div>
 
@@ -45,8 +49,8 @@
               (focus)="isPasswordFocused = true"
               (blur)="isPasswordFocused = false"
               [ngClass]="{
-                'invalid': f['password'].touched && f['password'].invalid,
-                'valid': f['password'].touched && f['password'].valid
+                'invalid': (f['password'].touched && f['password'].invalid) || errorType === 'password',
+                'valid': f['password'].touched && f['password'].valid && errorType !== 'password'
               }"
             />
             <i
@@ -60,10 +64,14 @@
               class="required-inside"
               >*</span>
           </div>
+          <!-- Password specific error -->
+          <div *ngIf="errorType === 'password'" class="field-error-message">
+            {{ errorMessage }}
+          </div>
         </div>
 
-        <!-- Messages d'erreur -->
-         <div *ngIf="errorMessage" class="error-message">
+        <!-- Messages d'erreur généraux -->
+        <div *ngIf="errorType === 'server'" class="error-message">
           {{ errorMessage }}
         </div>
 
@@ -72,13 +80,13 @@
           Se connecter
         </button>
 
-
         <!-- Lien d'inscription -->
         <div class="register-link">
-          Vous n’avez pas de compte ?
+          Vous n'avez pas de compte ?
           <a routerLink="/register">S'inscrire</a>
         </div>
       </form>
     </div>
   </div>
 </div>
+

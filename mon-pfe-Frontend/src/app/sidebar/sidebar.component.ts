@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../services/auth.service';  
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidebar',
@@ -12,9 +13,17 @@ export class SidebarComponent implements OnInit {
   isExpanded = true; // Toujours développé par défaut
   isLogged = false;  // Indicateur de l'état de connexion
   screenWidth: number;
+  isDashboardPage = false;
 
   constructor(private authService: AuthService, private router: Router) {
     this.screenWidth = window.innerWidth;
+    
+    // Vérifier si nous sommes sur une page de dashboard
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.isDashboardPage = this.checkIsDashboardPage(event.url);
+      });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -76,6 +85,15 @@ export class SidebarComponent implements OnInit {
         contentArea.style.marginLeft = this.screenWidth <= 992 ? '10px' : '70px';
       }
     }
+  }
+
+  // Vérifie si l'URL actuelle est une page de dashboard
+  checkIsDashboardPage(url: string): boolean {
+    return url.includes('/dashboard') || 
+           url.includes('/admin/') || 
+           url.includes('/user/') || 
+           url.includes('/intervenant/') || 
+           url.includes('/statistics/');
   }
 
   // Fonction pour récupérer le lien du dashboard en fonction du rôle de l'utilisateur

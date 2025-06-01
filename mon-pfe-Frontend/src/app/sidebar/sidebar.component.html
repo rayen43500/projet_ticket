@@ -1,12 +1,7 @@
 <!-- Sidebar principal qui ne s'affiche que lorsque l'utilisateur est connecté -->
 <div *ngIf="isLogged" class="sidebar" [ngClass]="{ 'expanded': isExpanded }">
   <!-- Section du profil -->
-  <div class="sidebar-header">
-    <div class="profile-section">
-      <i class="material-icons profile-icon">account_circle</i>
-      <span class="profile-text" [title]="user?.nom">{{ user?.nom }}</span>
-    </div>
-  </div>
+  
 
   <!-- Menu principal -->
   <ul class="sidebar-menu">
@@ -38,7 +33,7 @@
     </li>
 
     <!-- Intervenant uniquement -->
-    <li *ngIf="user?.role === 'INTERVENANT' || user">
+    <li *ngIf="user?.role === 'INTERVENANT'">
       <a routerLink="/intervenant/tickets-to-handle" routerLinkActive="active">
         <i class="material-icons">build</i>
         <span>Tickets</span>
@@ -56,14 +51,6 @@
       <a routerLink="/user/my-tickets" routerLinkActive="active">
         <i class="material-icons">list_alt</i>
         <span>Mes tickets</span>
-      </a>
-    </li>
-
-    <!-- Recherche des tickets - visible uniquement pour les utilisateurs -->
-    <li *ngIf="user?.role === 'UTILISATEUR'">
-      <a routerLink="/search-tickets" routerLinkActive="active">
-        <i class="material-icons">search</i>
-        <span>Rechercher tickets</span>
       </a>
     </li>
 

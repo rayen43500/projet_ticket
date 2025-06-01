@@ -19,11 +19,11 @@
     <div class="navbar-right">
       <!-- For logged-in users -->
       <div class="user-controls" *ngIf="isLogged">
-        <button class="icon-button" title="Notifications">
+        <button class="icon-button" title="Notifications" *ngIf="!isAdmin">
           <i class="material-icons">notifications</i>
           <span class="badge">3</span>
         </button>
-        <button class="icon-button" title="Messages">
+        <button class="icon-button" title="Messages" *ngIf="!isAdmin">
           <i class="material-icons">email</i>
           <span class="badge">5</span>
         </button>

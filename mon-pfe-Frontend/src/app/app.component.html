@@ -1,10 +1,20 @@
 <div [ngClass]="{'home-page': isHomePage}">
   <app-navbar></app-navbar>
   
-  <!-- Layout conditionnel en fonction de la page -->
-  <div *ngIf="!isHomePage">
+  <!-- Layout pour les pages avec sidebar (dashboard) -->
+  <div style="display: flex;" *ngIf="showSidebar">
     <app-sidebar></app-sidebar>
-    <main class="content-area">
+    <main style="width: 100%;">
+      <!-- Loader component for page transitions -->
+      <app-loader></app-loader>
+      <!-- Main content displayed via router -->
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  
+  <!-- Layout pour les pages sans sidebar (pages normales qui ne sont pas la page d'accueil) -->
+  <div *ngIf="!showSidebar && !isHomePage">
+    <main class="content-area-no-sidebar">
       <!-- Loader component for page transitions -->
       <app-loader></app-loader>
       <!-- Main content displayed via router -->

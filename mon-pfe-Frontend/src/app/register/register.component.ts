@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService, Utilisateur } from 'src/app/services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router'; // Importer le service Router
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,6 +24,10 @@ export class RegisterComponent implements OnInit {
   isPasswordFocused = false;
   passwordStrengthMessage: string = '';
   passwordStrengthLevel: 'weak' | 'medium' | 'strong' | 'empty' = 'empty';
+  
+  // Propriétés pour la gestion des erreurs
+  errorMessage: string | null = null;
+  errorType: 'fullName' | 'email' | 'password' | 'confirmPassword' | 'server' | null = null;
 
   // Injection des services nécessaires (authService et router)
   constructor(
@@ -44,7 +49,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       fullName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email, this.gmailValidator]],
+      email: ['', [Validators.required, Validators.email, this.emailValidator]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
     }, { validators: this.passwordsMatchValidator });
@@ -52,19 +57,38 @@ export class RegisterComponent implements OnInit {
     this.registerForm.get('password')?.valueChanges.subscribe((value: string) => {
       this.checkPasswordStrength(value);
     });
+    
+    // Réinitialiser les erreurs lorsque les champs sont modifiés
+    this.registerForm.valueChanges.subscribe(() => {
+      if (this.errorMessage) {
+        this.errorMessage = null;
+        this.errorType = null;
+      }
+    });
   }
 
-  // Validator pour une adresse Gmail
-  gmailValidator(control: any) {
+  // Validator pour une adresse email avec regex
+  emailValidator(control: any) {
     const email = control.value;
-    if (email && !email.endsWith('@gmail.com')) {
-      return { notGmail: true };
+    if (!email) return null;
+    
+    // Regex pour valider les adresses email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if (!emailRegex.test(email)) {
+      return { invalidEmail: true };
     }
     return null;
   }
 
   // Vérification de la force du mot de passe
   checkPasswordStrength(password: string) {
+    if (!password || password.length === 0) {
+      this.passwordStrengthLevel = 'empty';
+      this.passwordStrengthMessage = '';
+      return;
+    }
+    
     const hasUpperCase = /[A-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
@@ -103,10 +127,113 @@ export class RegisterComponent implements OnInit {
     );
   }
 
+  // Gestion des erreurs avec type
+  private handleError(error: { message: string, type: 'fullName' | 'email' | 'password' | 'confirmPassword' | 'server' }): void {
+    this.errorMessage = error.message;
+    this.errorType = error.type;
+    
+    // Disparait après 5 secondes pour les erreurs serveur
+    if (error.type === 'server') {
+      setTimeout(() => {
+        this.errorMessage = null;
+        this.errorType = null;
+      }, 5000);
+    }
+  }
+
+  // Gestion des erreurs de l'API
+  private handleApiError(err: HttpErrorResponse): void {
+    if (err.status === 400) {
+      if (err.error && err.error.message === "Email already exists") {
+        this.handleError({
+          message: 'Cet email est déjà utilisé',
+          type: 'email'
+        });
+        this.registerForm.get('email')?.setErrors({ emailExists: true });
+      } else if (err.error && err.error.message) {
+        // Traiter les messages d'erreur personnalisés du backend
+        const backendMessage = err.error.message;
+        
+        if (backendMessage.includes('mot de passe') || backendMessage.includes('password')) {
+          this.handleError({
+            message: backendMessage,
+            type: 'password'
+          });
+        } else if (backendMessage.includes('email')) {
+          this.handleError({
+            message: backendMessage,
+            type: 'email'
+          });
+        } else if (backendMessage.includes('nom') || backendMessage.includes('name')) {
+          this.handleError({
+            message: backendMessage,
+            type: 'fullName'
+          });
+        } else {
+          this.handleError({
+            message: backendMessage,
+            type: 'server'
+          });
+        }
+      }
+    } else if (err.status === 409) {
+      this.handleError({
+        message: 'Cet email est déjà utilisé',
+        type: 'email'
+      });
+      this.registerForm.get('email')?.setErrors({ emailExists: true });
+    } else {
+      this.handleError({
+        message: 'Une erreur est survenue lors de l\'inscription',
+        type: 'server'
+      });
+    }
+  }
+
   // Fonction de soumission du formulaire
   onSubmit(): void {
+    // Réinitialiser les messages d'erreur
+    this.errorMessage = null;
+    this.errorType = null;
+    
     this.isSubmitted = true;
-    if (this.registerForm.invalid || this.passwordStrengthLevel === 'weak' || this.passwordStrengthLevel === 'empty') return;
+    
+    if (this.registerForm.invalid) {
+      if (this.f['fullName'].invalid) {
+        this.handleError({
+          message: 'Veuillez entrer votre nom complet',
+          type: 'fullName'
+        });
+        return;
+      } else if (this.f['email'].invalid) {
+        this.handleError({
+          message: 'Veuillez entrer une adresse email valide',
+          type: 'email'
+        });
+        return;
+      } else if (this.f['password'].invalid) {
+        this.handleError({
+          message: 'Le mot de passe doit contenir au moins 6 caractères',
+          type: 'password'
+        });
+        return;
+      } else if (this.f['confirmPassword'].invalid || this.registerForm.errors?.['passwordsMismatch']) {
+        this.handleError({
+          message: 'Les mots de passe ne correspondent pas',
+          type: 'confirmPassword'
+        });
+        return;
+      }
+      return;
+    }
+
+    if (this.passwordStrengthLevel === 'weak' || this.passwordStrengthLevel === 'empty') {
+      this.handleError({
+        message: 'Votre mot de passe est trop faible',
+        type: 'password'
+      });
+      return;
+    }
 
     const utilisateur: Utilisateur = {
       nom: this.f['fullName'].value,
@@ -126,33 +253,14 @@ export class RegisterComponent implements OnInit {
           });
           this.router.navigate(['/login']);
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops... Une erreur est survenue!',
-            showConfirmButton: false,
-            timer: 2000
+          this.handleError({
+            message: 'Une erreur est survenue lors de l\'inscription',
+            type: 'server'
           });
         }
       },
-      error: (err) => {
-        // Si erreur de duplicata d'email
-        if (err.status === 400 && err.error && err.error.message === "Email already exists") {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops... Cet email est déjà utilisé!',
-            showConfirmButton: false,
-            timer: 2000
-          });
-          this.registerForm.get('email')?.reset();
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops... Une erreur est survenue!',
-            text: err.message || 'Veuillez réessayer plus tard',
-            showConfirmButton: false,
-            timer: 3000
-          });
-        }
+      error: (err: HttpErrorResponse) => {
+        this.handleApiError(err);
       }
     });
   }

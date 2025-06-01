@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import Swal from 'sweetalert2';
 
 
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   showPassword: boolean = false;
   errorMessage: string | null = null;
   isPasswordFocused: boolean = false; 
+  errorType: 'email' | 'password' | 'server' | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +34,7 @@ export class LoginComponent implements OnInit {
     });
 
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email, this.gmailValidator]],
+      email: ['', [Validators.required, Validators.email, this.emailValidator]],
       password: ['', Validators.required]
     });
   }
@@ -42,11 +44,16 @@ export class LoginComponent implements OnInit {
     return this.loginForm.controls;
   }
 
-  // Validator pour une adresse Gmail
-  gmailValidator(control: any) {
+  // Validator pour une adresse email avec regex
+  emailValidator(control: any) {
     const email = control.value;
-    if (email && !email.endsWith('@gmail.com')) {
-      return { notGmail: true };
+    if (!email) return null;
+    
+    // Regex pour valider les adresses email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    
+    if (!emailRegex.test(email)) {
+      return { invalidEmail: true };
     }
     return null;
   }
@@ -57,9 +64,21 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    // Réinitialiser les messages d'erreur
+    this.errorMessage = null;
+    this.errorType = null;
+
     if (this.loginForm.invalid) {
-      this.errorMessage = 'Veuillez remplir correctement le formulaire';
-      setTimeout(() => this.errorMessage = null, 2000);
+      if (this.f['email'].invalid) {
+        this.errorMessage = 'Veuillez entrer une adresse email valide';
+        this.errorType = 'email';
+      } else if (this.f['password'].invalid) {
+        this.errorMessage = 'Veuillez entrer votre mot de passe';
+        this.errorType = 'password';
+      } else {
+        this.errorMessage = 'Veuillez remplir correctement le formulaire';
+        this.errorType = 'server';
+      }
       return;
     }
 
@@ -72,8 +91,10 @@ export class LoginComponent implements OnInit {
       next: (response) => {
         // Vérifier si la réponse contient les données nécessaires
         if (!response || !response.utilisateur || !response.token) {
-          this.errorMessage = 'Réponse du serveur incomplète';
-          setTimeout(() => this.errorMessage = null, 2000);
+          this.handleError({
+            message: 'Réponse du serveur incomplète',
+            type: 'server'
+          });
           return;
         }
 
@@ -88,30 +109,76 @@ export class LoginComponent implements OnInit {
         // La redirection est gérée automatiquement par le AuthService
         this.redirectBasedOnRole();
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
         console.error('Erreur de connexion:', err);
-        
-        // Gestion des erreurs améliorée
-        if (err.status === 401) {
-          this.errorMessage = 'Mot de passe incorrect';
-        } else if (err.status === 404) {
-          this.errorMessage = 'Email non enregistré';
-        } else if (err.error && err.error.message) {
-          // Si le serveur renvoie un message spécifique
-          this.errorMessage = err.error.message;
-        } else if (err.message) {
-          this.errorMessage = err.message;
-        } else {
-          this.errorMessage = 'Erreur de connexion, veuillez réessayer';
-        }
-
-        // Ne pas réinitialiser tout le formulaire, juste le mot de passe
-        this.loginForm.get('password')?.reset();
-        
-        // Disparait après 2 secondes
-        setTimeout(() => this.errorMessage = null, 2000); 
+        this.handleApiError(err);
       }  
     });
+  }
+
+  // Gestion des erreurs de l'API
+  private handleApiError(err: HttpErrorResponse): void {
+    // Ne pas réinitialiser tout le formulaire, juste le mot de passe
+    this.loginForm.get('password')?.reset();
+    
+    if (err.status === 401) {
+      this.handleError({
+        message: 'Mot de passe incorrect',
+        type: 'password'
+      });
+    } else if (err.status === 404) {
+      this.handleError({
+        message: 'Email non enregistré',
+        type: 'email'
+      });
+    } else if (err.status === 429) {
+      this.handleError({
+        message: 'Trop de tentatives de connexion. Veuillez réessayer plus tard.',
+        type: 'server'
+      });
+    } else if (err.status === 403) {
+      this.handleError({
+        message: 'Votre compte a été temporairement bloqué pour des raisons de sécurité.',
+        type: 'server'
+      });
+    } else if (err.error && err.error.message) {
+      // Traiter les messages d'erreur personnalisés du backend
+      const backendMessage = err.error.message;
+      
+      if (backendMessage.includes('mot de passe') || backendMessage.includes('password')) {
+        this.handleError({
+          message: backendMessage,
+          type: 'password'
+        });
+      } else if (backendMessage.includes('email') || backendMessage.includes('utilisateur')) {
+        this.handleError({
+          message: backendMessage,
+          type: 'email'
+        });
+      } else {
+        this.handleError({
+          message: backendMessage,
+          type: 'server'
+        });
+      }
+    } else {
+      this.handleError({
+        message: 'Erreur de connexion, veuillez réessayer',
+        type: 'server'
+      });
+    }
+  }
+
+  // Gestion des erreurs avec type
+  private handleError(error: { message: string, type: 'email' | 'password' | 'server' }): void {
+    this.errorMessage = error.message;
+    this.errorType = error.type;
+    
+    // Disparait après 5 secondes
+    setTimeout(() => {
+      this.errorMessage = null;
+      this.errorType = null;
+    }, 5000);
   }
 
   // Fonction pour rediriger l'utilisateur selon son rôle

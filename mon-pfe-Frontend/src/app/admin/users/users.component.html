@@ -61,45 +61,76 @@
       </div>
       
       <div class="modal-body">
-        <form>
+        <form [formGroup]="userForm">
           <div class="mb-3">
-            <label class="form-label">Nom complet</label>
+            <label class="form-label">Nom complet <span class="text-danger">*</span></label>
             <input type="text" 
                    class="form-control" 
                    placeholder="Jean Dupont" 
-                   [(ngModel)]="userForm.nom"
-                   name="nom"
-                   required>
+                   formControlName="nom"
+                   [ngClass]="{'is-invalid': submitted && f['nom'].errors}">
+            <div *ngIf="submitted && f['nom'].errors" class="invalid-feedback">
+              <div *ngIf="f['nom'].errors['required']">Le nom est requis</div>
+              <div *ngIf="f['nom'].errors['minlength']">Le nom doit contenir au moins 3 caractères</div>
+            </div>
           </div>
+          
           <div class="row g-3">
             <div class="col-12 col-md-6">
-              <label class="form-label">Adresse email</label>
+              <label class="form-label">Adresse email <span class="text-danger">*</span></label>
               <input type="email" 
                      class="form-control" 
                      placeholder="jean.dupont@example.com" 
-                     [(ngModel)]="userForm.email"
-                     name="email"
-                     required>
+                     formControlName="email"
+                     [ngClass]="{'is-invalid': submitted && f['email'].errors}">
+              <div *ngIf="submitted && f['email'].errors" class="invalid-feedback">
+                <div *ngIf="f['email'].errors['required']">L'email est requis</div>
+                <div *ngIf="f['email'].errors['email'] || f['email'].errors['invalidEmail']">
+                  Veuillez entrer une adresse email valide
+                </div>
+              </div>
             </div>
             
             <div class="col-12 col-md-6">
-              <label class="form-label">Rôle</label>
+              <label class="form-label">Rôle <span class="text-danger">*</span></label>
               <select class="form-select" 
-                      [(ngModel)]="userForm.role"
-                      name="role">
+                      formControlName="role"
+                      [ngClass]="{'is-invalid': submitted && f['role'].errors}">
                 <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
               </select>
+              <div *ngIf="submitted && f['role'].errors" class="invalid-feedback">
+                <div *ngIf="f['role'].errors['required']">Le rôle est requis</div>
+              </div>
             </div>
           </div>
 
           <div class="mb-3" *ngIf="!editingUser">
-            <label class="form-label">Mot de passe</label>
+            <label class="form-label">Mot de passe <span class="text-danger">*</span></label>
             <input type="password" 
                    class="form-control" 
                    placeholder="••••••••" 
-                   [(ngModel)]="userForm.password"
-                   name="password"
-                   required>
+                   formControlName="password"
+                   [ngClass]="{'is-invalid': submitted && f['password'].errors}">
+            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+              <div *ngIf="f['password'].errors['required']">Le mot de passe est requis</div>
+              <div *ngIf="f['password'].errors['minlength']">
+                Le mot de passe doit contenir au moins 6 caractères
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-3" *ngIf="editingUser">
+            <label class="form-label">Mot de passe <small class="text-muted">(laisser vide pour ne pas modifier)</small></label>
+            <input type="password" 
+                   class="form-control" 
+                   placeholder="••••••••" 
+                   formControlName="password"
+                   [ngClass]="{'is-invalid': submitted && f['password'].errors}">
+            <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
+              <div *ngIf="f['password'].errors['minlength']">
+                Le mot de passe doit contenir au moins 6 caractères
+              </div>
+            </div>
           </div>
         </form>
       </div>

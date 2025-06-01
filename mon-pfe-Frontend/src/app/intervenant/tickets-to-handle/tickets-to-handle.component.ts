@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TicketService } from '../../services/ticket.service';
 import { AuthService, Utilisateur } from '../../services/auth.service';
+import { EmailService } from '../../services/email.service';
 import { Ticket } from '../../models/ticket.model';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tickets-to-handle',
@@ -28,6 +30,7 @@ export class TicketsToHandleComponent implements OnInit {
   constructor(
     private ticketService: TicketService,
     private authService: AuthService,
+    private emailService: EmailService,
     private router: Router
   ) { }
 
@@ -134,10 +137,62 @@ export class TicketsToHandleComponent implements OnInit {
     this.ticketService.updateTicketStatus(ticket.id!, newStatus).subscribe({
       next: (updatedTicket) => {
         this.loadTickets(); // Recharger les tickets
+        
+        // Si le nouveau statut est CLOTURE, envoyer un email au créateur
+        if (newStatus === 'CLOTURE' && ticket.createur && ticket.createur.email) {
+          // Méthode 1: Utiliser l'endpoint spécifique pour la notification de clôture
+          this.emailService.notifyTicketClosure(ticket.id!).subscribe({
+            next: () => {
+              console.log('Email de notification envoyé avec succès');
+              Swal.fire({
+                icon: 'success',
+                title: 'Ticket clôturé',
+                text: 'Un email de notification a été envoyé au créateur du ticket',
+                timer: 2000,
+                showConfirmButton: false
+              });
+            },
+            error: (err) => {
+              console.error('Erreur lors de l\'envoi de l\'email', err);
+              // On ne bloque pas le flux si l'email échoue
+              Swal.fire({
+                icon: 'warning',
+                title: 'Ticket clôturé',
+                text: 'Le ticket a été clôturé mais l\'email n\'a pas pu être envoyé',
+                timer: 2000,
+                showConfirmButton: false
+              });
+            }
+          });
+          
+          /* Méthode 2: Utiliser la méthode générique d'envoi d'email
+          this.emailService.sendTicketClosureNotification(
+            ticket.id!,
+            ticket.createur.email,
+            ticket.createur.nom,
+            ticket.sujet
+          ).subscribe({
+            next: () => {
+              console.log('Email de notification envoyé avec succès');
+            },
+            error: (err) => {
+              console.error('Erreur lors de l\'envoi de l\'email', err);
+              // On ne bloque pas le flux si l'email échoue
+            }
+          });
+          */
+        }
       },
       error: (err) => {
         console.error('Erreur de mise à jour du statut', err);
         this.error = 'Erreur lors de la mise à jour du statut';
+        Swal.fire({
+          icon: 'error',
+          title: 'Erreur',
+          text: 'Une erreur est survenue lors de la mise à jour du statut',
+          timer: 2000,
+          showConfirmButton: false
+        });
       }
     });
   }

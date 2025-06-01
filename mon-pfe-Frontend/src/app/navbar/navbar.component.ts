@@ -38,6 +38,10 @@ export class NavbarComponent implements OnInit {
     this.navbarOpen = !this.navbarOpen;
   }
 
+  isAdmin(): boolean {
+    return this.currentUser.role === 'ADMIN';
+  }
+
   // Logout method
   logout(): void {
     this.authService.logout();

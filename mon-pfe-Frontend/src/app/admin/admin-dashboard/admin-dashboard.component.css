@@ -9,7 +9,6 @@ p {
 /* Main Dashboard Container */
 .dashboard-container {
   padding: 2rem;
-  max-width: 1400px;
   margin: 0 auto;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f9fafb;
@@ -144,8 +143,9 @@ p {
 
 /* Feature Grid */
 .feature-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  width: 1100px;
   gap: 1.5rem;
   margin-bottom: 2.5rem;
 }
@@ -156,6 +156,7 @@ p {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 2rem;
   display: flex;
+  width: 500px;
   flex-direction: column;
   position: relative;
   overflow: hidden;

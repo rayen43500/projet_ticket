@@ -12,6 +12,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'mon-pfe';
   isHomePage = false;
+  showSidebar = false;
   
   @ViewChild(SidebarComponent) sidebar!: SidebarComponent;
 
@@ -19,10 +20,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     private loadingService: LoadingService,
     private router: Router
   ) {
-    // Détecter si nous sommes sur la page d'accueil
+    // Détecter si nous sommes sur la page d'accueil et si nous devons afficher la sidebar
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         this.isHomePage = event.url === '/home' || event.url === '/';
+        this.showSidebar = this.isDashboardPage(event.url);
       }
     });
   }
@@ -47,9 +49,10 @@ export class AppComponent implements OnInit, AfterViewInit {
           }, 300); // Small delay to ensure smooth transitions
         }
         
-        // Mettre à jour l'état de la page d'accueil
+        // Mettre à jour l'état de la page d'accueil et de la sidebar
         if (event instanceof NavigationEnd) {
           this.isHomePage = event.url === '/home' || event.url === '/';
+          this.showSidebar = this.isDashboardPage(event.url);
         }
       });
   }
@@ -57,9 +60,19 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // Assurer que le content area s'ajuste correctement après le chargement de la page
     setTimeout(() => {
-      if (this.sidebar && !this.isHomePage) {
+      if (this.sidebar && this.showSidebar) {
         this.sidebar.adjustContentArea();
       }
     }, 100);
+  }
+
+  // Vérifie si l'URL actuelle est une page de dashboard ou une page qui nécessite la sidebar
+  isDashboardPage(url: string): boolean {
+    // Vérifier si l'URL contient 'dashboard' ou fait partie des routes qui nécessitent la sidebar
+    return url.includes('/dashboard') || 
+           url.includes('/admin/') || 
+           url.includes('/user/') || 
+           url.includes('/intervenant/') || 
+           url.includes('/statistics/');
   }
 }

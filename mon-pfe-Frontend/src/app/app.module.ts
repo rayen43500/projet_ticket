@@ -41,6 +41,7 @@ import { SubgroupsComponent } from './admin/subgroups/subgroups.component';
 import { AuthService } from './services/auth.service';
 import { TicketService } from './services/ticket.service';
 import { StatisticsService } from './services/statistics.service';
+import { EmailService } from './services/email.service';
 import { TokenInterceptor } from './services/token.interceptor';
 
 @NgModule({
@@ -81,6 +82,7 @@ import { TokenInterceptor } from './services/token.interceptor';
     AuthService,
     TicketService,
     StatisticsService,
+    EmailService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }
   ],
   bootstrap: [AppComponent],
