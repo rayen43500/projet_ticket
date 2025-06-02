@@ -1,18 +1,19 @@
 package com.example.monpfebackend.Service;
 
-import com.example.monpfebackend.Entity.Commentaire;
-import com.example.monpfebackend.Entity.Groupe;
-import com.example.monpfebackend.Entity.Ticket;
-import com.example.monpfebackend.Entity.Utilisateur;
-import com.example.monpfebackend.Repository.UserRepository;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import com.example.monpfebackend.Entity.Commentaire;
+import com.example.monpfebackend.Entity.Groupe;
+import com.example.monpfebackend.Entity.Ticket;
+import com.example.monpfebackend.Entity.Utilisateur;
+import com.example.monpfebackend.Repository.UserRepository;
 
 @Service
 public class EmailService {
@@ -82,7 +83,7 @@ public class EmailService {
         // 1. Le créateur du ticket
         // 2. L'intervenant assigné au ticket
         // 3. Les autres personnes ayant commenté le ticket
-
+        
         List<String> emailsToNotify = userRepository.findEmailsOfPeopleInvolvedInTicket(ticket.getId())
                 .stream()
                 .filter(email -> email != null && !email.isEmpty())
